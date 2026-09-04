@@ -46,33 +46,156 @@ function initNewArrivalsScroller() {
    from the coupon data in the database.
    ------------------------------------------------------------------------ */
 function initCountdown() {
-  const countdownEl = document.querySelector(".countdown");
+
+  const countdownEl =
+    document.querySelector(".countdown");
+
   if (!countdownEl) return;
 
-  const hoursEl = countdownEl.querySelector("[data-unit='hours']");
-  const minutesEl = countdownEl.querySelector("[data-unit='minutes']");
-  const secondsEl = countdownEl.querySelector("[data-unit='seconds']");
 
-  // Demo target: 48 hours from the moment the page loads.
-  const targetDate = new Date();
-  targetDate.setHours(targetDate.getHours() + 48);
+  const hoursEl =
+    countdownEl.querySelector(
+      "[data-unit='hours']"
+    );
 
-  function updateCountdown() {
-    const now = new Date();
-    let diffInSeconds = Math.max(0, Math.floor((targetDate - now) / 1000));
+  const minutesEl =
+    countdownEl.querySelector(
+      "[data-unit='minutes']"
+    );
 
-    const hours = Math.floor(diffInSeconds / 3600);
-    const minutes = Math.floor((diffInSeconds % 3600) / 60);
-    const seconds = diffInSeconds % 60;
+  const secondsEl =
+    countdownEl.querySelector(
+      "[data-unit='seconds']"
+    );
 
-    // padStart(2, "0") turns 5 into "05" so the digits don't jump around.
-    hoursEl.textContent = String(hours).padStart(2, "0");
-    minutesEl.textContent = String(minutes).padStart(2, "0");
-    secondsEl.textContent = String(seconds).padStart(2, "0");
+
+  if (
+    !hoursEl ||
+    !minutesEl ||
+    !secondsEl
+  ) {
+    return;
   }
 
-  updateCountdown(); // run once immediately so there's no 1-second blank flash
-  setInterval(updateCountdown, 1000); // then keep updating every second
+
+  const COUNTDOWN_KEY =
+    "threadco_sale_end";
+
+
+  /*
+   * Check whether an expiry time already exists.
+   */
+
+  let targetTime =
+    Number(
+      localStorage.getItem(
+        COUNTDOWN_KEY
+      )
+    );
+
+
+  /*
+   * First visit:
+   * create a 48-hour countdown.
+   */
+
+  if (
+    !targetTime ||
+    targetTime <= Date.now()
+  ) {
+
+    targetTime =
+      Date.now() +
+      48 * 60 * 60 * 1000;
+
+
+    localStorage.setItem(
+      COUNTDOWN_KEY,
+      String(targetTime)
+    );
+
+  }
+
+
+  function updateCountdown() {
+
+    const difference =
+      Math.max(
+        0,
+        targetTime - Date.now()
+      );
+
+
+    let totalSeconds =
+      Math.floor(
+        difference / 1000
+      );
+
+
+    const hours =
+      Math.floor(
+        totalSeconds / 3600
+      );
+
+
+    totalSeconds %= 3600;
+
+
+    const minutes =
+      Math.floor(
+        totalSeconds / 60
+      );
+
+
+    const seconds =
+      totalSeconds % 60;
+
+
+    hoursEl.textContent =
+      String(hours).padStart(
+        2,
+        "0"
+      );
+
+
+    minutesEl.textContent =
+      String(minutes).padStart(
+        2,
+        "0"
+      );
+
+
+    secondsEl.textContent =
+      String(seconds).padStart(
+        2,
+        "0"
+      );
+
+
+    /*
+     * Stop when countdown reaches zero.
+     */
+
+    if (
+      difference <= 0
+    ) {
+
+      clearInterval(timer);
+
+    }
+
+  }
+
+
+  updateCountdown();
+
+
+  const timer =
+    setInterval(
+      updateCountdown,
+      1000
+    );
+
 }
 
 /* ------------------------------------------------------------------------

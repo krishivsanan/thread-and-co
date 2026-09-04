@@ -116,6 +116,13 @@
   color: var(--color-mustard);
 }
 
+.footer__newsletter-msg {
+  min-height: 20px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--color-brick);
+}
+
 @media (max-width: 800px) {
   .footer__grid {
     grid-template-columns: 1fr 1fr;

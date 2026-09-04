@@ -60,14 +60,47 @@ function initNewsletterForm() {
   const message = document.querySelector(".footer__newsletter-msg");
 
   form.addEventListener("submit", (event) => {
-    event.preventDefault(); // stop the page from reloading
+    event.preventDefault();
 
-    const emailInput = form.querySelector("input[type='email']");
-    const email = emailInput.value.trim();
+    const emailInput =
+      form.querySelector("input[type='email']");
 
-    if (!email) return;
+      const email =
+        emailInput.value.trim();
 
-    message.textContent = `Thanks! We'll send offers to ${email}.`;
+
+      /* Empty email */
+
+      if (!email) {
+      
+        message.textContent =
+          "Please enter your email address.";
+      
+        emailInput.focus();
+      
+        return;
+      }
+
+
+    /* Invalid email */
+      
+    if (!emailInput.checkValidity()) {
+    
+      message.textContent =
+        "Please enter a valid email address.";
+    
+      emailInput.focus();
+    
+      return;
+    }
+  
+  
+    /* Success */
+  
+    message.textContent =
+      `Thanks! We'll send offers to ${email}.`;
+  
     form.reset();
+  
   });
 }
