@@ -1,0 +1,184 @@
+/* ---------------------------------------------------------------------- */
+/* HELP PAGE                                                              */
+/* ---------------------------------------------------------------------- */
+
+.help-page {
+  background-color: var(--color-bg);
+  min-height: 70vh;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* HERO                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.help-hero {
+  padding-block: var(--space-2xl);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.help-hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-brick);
+}
+
+.help-hero h1 {
+  margin-top: var(--space-sm);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  color: var(--color-ink);
+}
+
+.help-hero p:last-child {
+  max-width: 55ch;
+  margin-top: var(--space-md);
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* CONTENT                                                                */
+/* ---------------------------------------------------------------------- */
+
+.help-content {
+  padding-block: var(--space-2xl);
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.help-card {
+  padding: var(--space-xl);
+
+  background-color: var(--color-card);
+
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+
+  scroll-margin-top: 100px;
+}
+
+.help-card__number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-brick);
+  letter-spacing: 0.08em;
+}
+
+.help-card h2 {
+  margin-top: var(--space-sm);
+  font-size: 1.8rem;
+  color: var(--color-ink);
+}
+
+.help-card > p {
+  margin-top: var(--space-sm);
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.help-card__link {
+  display: inline-block;
+  margin-top: var(--space-md);
+
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  border-bottom: 1px solid var(--color-ink);
+  padding-bottom: 3px;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* FAQ                                                                    */
+/* ---------------------------------------------------------------------- */
+
+.faq-list {
+  margin-top: var(--space-md);
+  border-top: 1px solid var(--color-line);
+}
+
+.faq-list details {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.faq-list summary {
+  padding-block: var(--space-md);
+
+  cursor: pointer;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.faq-list p {
+  padding-bottom: var(--space-md);
+
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* CONTACT                                                                */
+/* ---------------------------------------------------------------------- */
+
+.contact-details {
+  margin-block: var(--space-lg);
+
+  padding-block: var(--space-md);
+
+  border-block: 1px solid var(--color-line);
+}
+
+.contact-details p {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.contact-details p + p {
+  margin-top: var(--space-sm);
+}
+
+.contact-details strong {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: var(--color-ink);
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* RESPONSIVE                                                             */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 700px) {
+
+  .help-hero,
+  .help-content {
+    padding-block: var(--space-xl);
+  }
+
+  .help-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-card {
+    padding: var(--space-lg);
+  }
+
+}
