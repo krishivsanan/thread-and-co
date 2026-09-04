@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Checkout | Thread & Co.</title>
+  <meta
+    name="description"
+    content="Complete your order at Thread & Co."
+  />
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <!-- Checkout CSS -->
+  <link rel="stylesheet" href="css/checkout.css" />
+</head>
+
+<body>
+
+  <!-- =========================================================
+       NAVBAR
+       ========================================================= -->
+
+  <header class="navbar">
+    <p class="navbar__announcement">
+      Free shipping on orders over $50
+      &nbsp;•&nbsp;
+      New drops every Friday
+    </p>
+
+    <div class="container navbar__row">
+
+      <a href="index.html" class="navbar__logo">
+        Thread<span>&</span>Co.
+      </a>
+
+      <nav aria-label="Main">
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html?category=men">Men</a></li>
+          <li><a href="products.html?category=women">Women</a></li>
+          <li><a href="products.html?category=shoes">Shoes</a></li>
+          <li><a href="products.html?category=accessories">Accessories</a></li>
+        </ul>
+      </nav>
+
+      <form
+        class="navbar__search"
+        role="search"
+        action="products.html"
+        method="get"
+      >
+        <label for="site-search" class="visually-hidden">
+          Search products
+        </label>
+
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+
+        <input
+          type="search"
+          id="site-search"
+          name="q"
+          placeholder="Search products..."
+        />
+      </form>
+
+      <div class="navbar__actions">
+
+        <!-- Wishlist -->
+        <a
+          href="wishlist.html"
+          class="navbar__icon-btn"
+          aria-label="Wishlist"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z"
+            />
+          </svg>
+        </a>
+
+        <!-- Account -->
+        <a
+          href="login.html"
+          class="navbar__icon-btn"
+          aria-label="Account"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"></path>
+          </svg>
+        </a>
+
+        <!-- Cart -->
+        <a
+          href="cart.html"
+          class="navbar__icon-btn"
+          aria-label="Cart"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="19" cy="21" r="1"></circle>
+            <path
+              d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6"
+            />
+          </svg>
+
+          <span class="navbar__icon-badge" hidden>0</span>
+        </a>
+
+      </div>
+
+      <!-- Mobile menu -->
+      <button
+        class="navbar__toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- =========================================================
+       CHECKOUT
+       ========================================================= -->
+
+  <main id="checkout-main">
+
+    <!-- Page header -->
+    <section class="checkout-header">
+      <div class="container">
+
+        <p class="breadcrumb">
+          <a href="index.html">Home</a>
+          /
+          <a href="cart.html">Cart</a>
+          /
+          <span>Checkout</span>
+        </p>
+
+        <div class="checkout-header__content">
+          <div>
+            <p class="checkout-header__eyebrow">
+              SECURE CHECKOUT
+            </p>
+
+            <h1>Almost yours.</h1>
+
+            <p>
+              Complete your details below and we'll take care of the rest.
+            </p>
+          </div>
+
+          <a href="cart.html" class="checkout-back">
+            ← Back to cart
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Main checkout area -->
+    <section class="container checkout-layout">
+
+      <!-- =====================================================
+           LEFT SIDE — FORM
+           ===================================================== -->
+
+      <form id="checkout-form" class="checkout-form" novalidate>
+
+
+        <!-- CONTACT -->
+        <section class="checkout-section">
+
+          <div class="checkout-section__heading">
+            <span class="checkout-step">01</span>
+
+            <div>
+              <h2>Contact</h2>
+              <p>Where should we send your order updates?</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-field form-field--full">
+              <label for="email">Email address</label>
+
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-field form-field--full">
+              <label class="checkbox-label">
+                <input type="checkbox" id="newsletter" />
+                <span>Keep me updated with new drops and exclusive offers</span>
+              </label>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- DELIVERY -->
+        <section class="checkout-section">
+
+          <div class="checkout-section__heading">
+            <span class="checkout-step">02</span>
+
+            <div>
+              <h2>Delivery</h2>
+              <p>Tell us where your order is going.</p>
+            </div>
+          </div>
+
+
+          <div class="form-grid">
+
+            <div class="form-field">
+              <label for="first-name">First name</label>
+
+              <input
+                type="text"
+                id="first-name"
+                name="firstName"
+                placeholder="First name"
+                required
+              />
+            </div>
+
+
+            <div class="form-field">
+              <label for="last-name">Last name</label>
+
+              <input
+                type="text"
+                id="last-name"
+                name="lastName"
+                placeholder="Last name"
+                required
+              />
+            </div>
+
+
+            <div class="form-field form-field--full">
+              <label for="address">Address</label>
+
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="House number and street"
+                required
+              />
+            </div>
+
+
+            <div class="form-field form-field--full">
+              <label for="apartment">
+                Apartment, suite, etc.
+                <span>(optional)</span>
+              </label>
+
+              <input
+                type="text"
+                id="apartment"
+                name="apartment"
+                placeholder="Apartment or suite"
+              />
+            </div>
+
+
+            <div class="form-field">
+              <label for="city">City</label>
+
+              <input
+                type="text"
+                id="city"
+                name="city"
+                placeholder="Your city"
+                required
+              />
+            </div>
+
+
+            <div class="form-field">
+              <label for="state">State</label>
+
+              <input
+                type="text"
+                id="state"
+                name="state"
+                placeholder="State"
+                required
+              />
+            </div>
+
+
+            <div class="form-field">
+              <label for="postal-code">Postal code</label>
+
+              <input
+                type="text"
+                id="postal-code"
+                name="postalCode"
+                placeholder="Postal code"
+                required
+              />
+            </div>
+
+
+            <div class="form-field">
+              <label for="country">Country</label>
+
+              <select id="country" name="country" required>
+                <option value="">Select country</option>
+                <option value="India">India</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+              </select>
+            </div>
+
+
+            <div class="form-field form-field--full">
+              <label for="phone">Phone number</label>
+
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+91 00000 00000"
+                required
+              />
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- SHIPPING METHOD -->
+        <section class="checkout-section">
+
+          <div class="checkout-section__heading">
+            <span class="checkout-step">03</span>
+
+            <div>
+              <h2>Shipping method</h2>
+              <p>Choose how you'd like to receive your order.</p>
+            </div>
+          </div>
+
+
+          <div class="shipping-options">
+
+            <label class="shipping-option shipping-option--selected">
+
+              <input
+                type="radio"
+                name="shipping"
+                value="standard"
+                checked
+              />
+
+              <span class="shipping-option__radio"></span>
+
+              <span class="shipping-option__content">
+
+                <strong>Standard delivery</strong>
+
+                <small>3–5 business days</small>
+
+              </span>
+
+              <span
+                class="shipping-option__price"
+                id="standard-shipping-price"
+              >
+                Free
+              </span>
+
+            </label>
+
+
+            <label class="shipping-option">
+
+              <input
+                type="radio"
+                name="shipping"
+                value="express"
+              />
+
+              <span class="shipping-option__radio"></span>
+
+              <span class="shipping-option__content">
+
+                <strong>Express delivery</strong>
+
+                <small>1–2 business days</small>
+
+              </span>
+
+              <span class="shipping-option__price">
+                $12.99
+              </span>
+
+            </label>
+
+          </div>
+
+        </section>
+
+
+        <!-- PAYMENT -->
+        <section class="checkout-section">
+
+          <div class="checkout-section__heading">
+            <span class="checkout-step">04</span>
+
+            <div>
+              <h2>Payment</h2>
+              <p>Your payment information is for demo purposes only.</p>
+            </div>
+          </div>
+
+
+          <div class="payment-methods">
+
+            <!-- CARD -->
+            <label class="payment-method payment-method--active">
+
+              <input
+                type="radio"
+                name="payment"
+                value="card"
+                checked
+              />
+
+              <span class="payment-method__radio"></span>
+
+              <span class="payment-method__icon">
+                💳
+              </span>
+
+              <span>
+                <strong>Credit or debit card</strong>
+                <small>Visa, Mastercard and more</small>
+              </span>
+
+            </label>
+
+
+            <!-- CASH -->
+            <label class="payment-method">
+
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+              />
+
+              <span class="payment-method__radio"></span>
+
+              <span class="payment-method__icon">
+                ◉
+              </span>
+
+              <span>
+                <strong>Cash on delivery</strong>
+                <small>Pay when your order arrives</small>
+              </span>
+
+            </label>
+
+          </div>
+
+
+          <!-- Card details -->
+          <div id="card-details" class="card-details">
+
+            <div class="form-field form-field--full">
+              <label for="card-name">Name on card</label>
+
+              <input
+                type="text"
+                id="card-name"
+                placeholder="Name as shown on card"
+              />
+            </div>
+
+
+            <div class="form-field form-field--full">
+              <label for="card-number">Card number</label>
+
+              <input
+                type="text"
+                id="card-number"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                inputmode="numeric"
+              />
+            </div>
+
+
+            <div class="form-grid form-grid--card">
+
+              <div class="form-field">
+                <label for="expiry">Expiry date</label>
+
+                <input
+                  type="text"
+                  id="expiry"
+                  placeholder="MM / YY"
+                  maxlength="7"
+                />
+              </div>
+
+
+              <div class="form-field">
+                <label for="cvv">CVV</label>
+
+                <input
+                  type="password"
+                  id="cvv"
+                  placeholder="•••"
+                  maxlength="4"
+                  inputmode="numeric"
+                />
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- MOBILE ORDER SUMMARY -->
+        <section class="checkout-mobile-summary">
+
+          <button
+            type="button"
+            id="mobile-summary-toggle"
+            class="mobile-summary-toggle"
+          >
+            <span>
+              Order summary
+              <span id="mobile-item-count">(0 items)</span>
+            </span>
+
+            <span id="mobile-summary-total">$0.00</span>
+          </button>
+
+
+          <div
+            id="mobile-summary-content"
+            class="mobile-summary-content"
+          >
+          </div>
+
+        </section>
+
+
+        <!-- PLACE ORDER -->
+        <div class="checkout-submit">
+
+          <button
+            type="submit"
+            id="place-order-btn"
+            class="btn btn--primary checkout-place-order"
+          >
+            <span>Place secure order</span>
+            <strong id="place-order-total">$0.00</strong>
+          </button>
+
+          <p class="checkout-security">
+            🔒 Secure checkout · Your information is protected
+          </p>
+
+        </div>
+
+      </form>
+
+
+      <!-- =====================================================
+           RIGHT SIDE — ORDER SUMMARY
+           ===================================================== -->
+
+      <aside
+        class="checkout-summary"
+        aria-label="Order summary"
+      >
+
+        <div class="checkout-summary__sticky">
+
+          <div class="checkout-summary__header">
+
+            <div>
+              <p class="summary-eyebrow">
+                YOUR ORDER
+              </p>
+
+              <h2>
+                Order summary
+              </h2>
+            </div>
+
+            <a href="cart.html">
+              Edit cart
+            </a>
+
+          </div>
+
+
+          <!-- Filled dynamically -->
+          <div
+            id="checkout-items"
+            class="checkout-items"
+          >
+          </div>
+
+
+          <!-- Coupon -->
+          <form
+            id="checkout-coupon-form"
+            class="checkout-coupon"
+          >
+
+            <label
+              for="checkout-coupon-input"
+              class="visually-hidden"
+            >
+              Coupon code
+            </label>
+
+            <input
+              type="text"
+              id="checkout-coupon-input"
+              placeholder="Discount code"
+            />
+
+            <button
+              type="submit"
+              class="btn btn--outline btn--sm"
+            >
+              Apply
+            </button>
+
+          </form>
+
+
+          <p
+            id="checkout-coupon-msg"
+            class="checkout-coupon-msg"
+            aria-live="polite"
+          >
+          </p>
+
+
+          <!-- Totals -->
+          <div
+            id="checkout-totals"
+            class="checkout-totals"
+          >
+          </div>
+
+
+          <div class="checkout-guarantees">
+
+            <div>
+              <span>✓</span>
+
+              <p>
+                <strong>Secure checkout</strong>
+                Your information is protected.
+              </p>
+            </div>
+
+
+            <div>
+              <span>↺</span>
+
+              <p>
+                <strong>Easy returns</strong>
+                Return eligible items within 30 days.
+              </p>
+            </div>
+
+
+            <div>
+              <span>⚡</span>
+
+              <p>
+                <strong>Fast dispatch</strong>
+                Orders are prepared within 1–2 business days.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       ORDER SUCCESS MODAL
+       ========================================================= -->
+
+  <div
+    id="order-success-modal"
+    class="order-success-modal"
+    hidden
+  >
+
+    <div class="order-success-modal__card">
+
+      <div class="success-icon">
+        ✓
+      </div>
+
+      <p class="success-eyebrow">
+        ORDER CONFIRMED
+      </p>
+
+      <h2>
+        You're all set.
+      </h2>
+
+      <p>
+        Thank you for shopping with Thread & Co.
+        We've received your order and will send updates to your email.
+      </p>
+
+      <div class="success-order-number">
+        <span>Order number</span>
+
+        <strong id="success-order-number">
+          TC-000000
+        </strong>
+      </div>
+
+      <a
+        href="index.html"
+        class="btn btn--primary"
+      >
+        Continue shopping
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+
+  <footer class="footer">
+
+    <div class="container">
+
+      <div class="footer__grid">
+
+        <div class="footer__brand">
+
+          <a
+            href="index.html"
+            class="navbar__logo"
+          >
+            Thread<span>&</span>Co.
+          </a>
+
+          <p>
+            Considered clothing for the way you actually live,
+            work and move.
+          </p>
+
+        </div>
+
+
+        <nav aria-label="Shop">
+
+          <h3 class="footer__heading">
+            Shop
+          </h3>
+
+          <ul class="footer__links">
+            <li>
+              <a href="products.html?category=men">Men</a>
+            </li>
+
+            <li>
+              <a href="products.html?category=women">Women</a>
+            </li>
+
+            <li>
+              <a href="products.html?category=shoes">Shoes</a>
+            </li>
+
+            <li>
+              <a href="products.html?category=accessories">
+                Accessories
+              </a>
+            </li>
+          </ul>
+
+        </nav>
+
+
+        <nav aria-label="Help">
+
+          <h3 class="footer__heading">
+            Help
+          </h3>
+
+          <ul class="footer__links">
+            <li><a href="#">Track order</a></li>
+            <li><a href="#">Shipping &amp; returns</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+
+        </nav>
+
+
+        <div>
+
+          <h3 class="footer__heading">
+            Stay in the loop
+          </h3>
+
+          <p
+            style="
+              color: rgba(242,237,228,0.65);
+              font-size: 0.85rem;
+            "
+          >
+            Sign up for 10% off your first order.
+          </p>
+
+
+          <form class="footer__newsletter-form">
+
+            <label
+              for="newsletter-email"
+              class="visually-hidden"
+            >
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="newsletter-email"
+              placeholder="you@example.com"
+              required
+            />
+
+            <button type="submit">
+              Join
+            </button>
+
+          </form>
+
+          <p
+            class="footer__newsletter-msg"
+            aria-live="polite"
+          >
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer__bottom">
+
+        <p>
+          &copy; 2026 Thread &amp; Co.
+        </p>
+
+        <div class="footer__socials">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Pinterest">PIN</a>
+          <a href="#" aria-label="TikTok">TT</a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+
+  <script src="js/main.js"></script>
+
+  <script src="js/store/cart-store.js"></script>
+
+  <script src="js/shared/navbar-badges.js"></script>
+
+  <script src="js/data/products.js"></script>
+
+  <script src="js/checkout.js"></script>
+
+</body>
+</html>

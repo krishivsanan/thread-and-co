@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>My Account | Thread & Co.</title>
+
+  <!-- Shared CSS -->
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Account CSS -->
+
+  <link rel="stylesheet" href="css/account.css">
+
+</head>
+
+
+<body>
+
+
+  <!-- ================================================================
+       NAVBAR
+       ================================================================ -->
+
+  <header class="navbar">
+
+    <p class="navbar__announcement">
+      Free shipping on orders over $50
+      &nbsp;•&nbsp;
+      New drops every Friday
+    </p>
+
+
+    <div class="container navbar__row">
+
+
+      <!-- LOGO -->
+
+      <a
+        href="index.html"
+        class="navbar__logo"
+      >
+        Thread<span>&</span>Co.
+      </a>
+
+
+      <!-- NAVIGATION -->
+
+      <nav aria-label="Main navigation">
+
+        <ul class="navbar__links">
+
+          <li>
+            <a href="index.html">
+              Home
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=men">
+              Men
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=women">
+              Women
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=shoes">
+              Shoes
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=accessories">
+              Accessories
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+
+      <!-- ACTIONS -->
+
+      <div class="navbar__actions">
+
+        <a
+          href="wishlist.html"
+          class="navbar__icon-btn"
+          aria-label="Wishlist"
+        >
+          ♡
+        </a>
+
+
+        <a
+          href="account.html"
+          class="navbar__icon-btn"
+          aria-label="My account"
+        >
+          ♙
+        </a>
+
+
+        <a
+          href="cart.html"
+          class="navbar__icon-btn"
+          aria-label="Cart"
+        >
+
+          🛒
+
+          <span
+            class="navbar__icon-badge"
+            hidden
+          >
+            0
+          </span>
+
+        </a>
+
+      </div>
+
+
+      <!-- MOBILE MENU -->
+
+      <button
+        class="navbar__toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- ================================================================
+       MAIN
+       ================================================================ -->
+
+  <main class="account-page">
+
+
+    <!-- HEADER -->
+
+    <section class="account-hero">
+
+      <div class="container">
+
+        <p class="account-hero__eyebrow">
+          MY THREAD & CO.
+        </p>
+
+        <h1>
+          Welcome back,
+          <span id="account-user-name">
+            Guest
+          </span>
+        </h1>
+
+        <p>
+          Manage your account and keep track of every order.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ACCOUNT CONTENT -->
+
+    <section class="account-content">
+
+      <div class="container account-dashboard">
+
+
+        <!-- PROFILE -->
+
+        <aside class="account-profile">
+
+          <div class="profile-avatar" id="profile-avatar">
+            U
+          </div>
+
+
+          <h2 id="profile-name">
+            User
+          </h2>
+
+
+          <p id="profile-email">
+            user@example.com
+          </p>
+
+
+          <div class="profile-divider"></div>
+
+
+          <button
+            id="logout-btn"
+            class="btn btn--secondary profile-logout"
+          >
+            Log out
+          </button>
+
+        </aside>
+
+
+        <!-- ORDERS -->
+
+        <section class="account-orders">
+
+
+          <div class="account-orders__header">
+
+            <div>
+
+              <p class="account-orders__eyebrow">
+                ORDER HISTORY
+              </p>
+
+              <h2>
+                Your orders
+              </h2>
+
+            </div>
+
+
+            <span
+              id="orders-count"
+              class="orders-count"
+            >
+              0 orders
+            </span>
+
+          </div>
+
+
+          <!-- ORDER LIST -->
+
+          <div
+            id="orders-list"
+            class="orders-list"
+          >
+
+            <!-- JavaScript will render orders here -->
+
+          </div>
+
+
+        </section>
+
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+
+  <footer class="footer">
+
+    <div class="container">
+
+
+      <div class="footer__grid">
+
+
+        <div class="footer__brand">
+
+          <a
+            href="index.html"
+            class="navbar__logo"
+          >
+            Thread<span>&</span>Co.
+          </a>
+
+          <p>
+            Considered clothing for the way you
+            actually live, work and move.
+          </p>
+
+        </div>
+
+
+        <nav>
+
+          <h3 class="footer__heading">
+            Shop
+          </h3>
+
+          <ul class="footer__links">
+
+            <li>
+              <a href="products.html?category=men">
+                Men
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=women">
+                Women
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=shoes">
+                Shoes
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=accessories">
+                Accessories
+              </a>
+            </li>
+
+          </ul>
+
+        </nav>
+
+
+        <nav>
+
+          <h3 class="footer__heading">
+            Help
+          </h3>
+
+          <ul class="footer__links">
+
+            <li>
+              <a href="#">
+                Track order
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                Shipping &amp; returns
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                FAQ
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                Contact us
+              </a>
+            </li>
+
+          </ul>
+
+        </nav>
+
+
+        <div>
+
+          <h3 class="footer__heading">
+            Stay in the loop
+          </h3>
+
+          <p class="footer-text">
+            Sign up for 10% off your first order.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="footer__bottom">
+
+        <p>
+          © 2026 Thread &amp; Co.
+        </p>
+
+
+        <div class="footer__socials">
+
+          <a href="#">IG</a>
+          <a href="#">PIN</a>
+          <a href="#">TT</a>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </footer>
+
+
+  <!-- ================================================================
+       JAVASCRIPT
+       ================================================================ -->
+
+  <script src="js/main.js"></script>
+
+  <script src="js/account.js"></script>
+
+
+</body>
+
+</html>

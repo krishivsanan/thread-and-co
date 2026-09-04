@@ -1,0 +1,226 @@
+/* ==========================================================================
+   NAVBAR.CSS
+   ------------------------------------------------------------------------
+   Styles for the top navigation bar defined in index.html.
+   Copy the SAME <header class="navbar">...</header> markup (see the
+   comment block at the top of index.html) into every new page you build,
+   then link this file, so the navbar looks identical site-wide.
+   ========================================================================== */
+
+.navbar {
+  position: sticky; /* stays pinned to the top while the page scrolls */
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* Thin promo strip above the main nav row, e.g. "Free shipping over $50" */
+.navbar__announcement {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-block: 0.5em;
+}
+
+.navbar__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+}
+
+/* ---------- LOGO ---------- */
+.navbar__logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.navbar__logo span {
+  color: var(--color-brick);
+}
+
+/* ---------- NAV LINKS (Men / Women / Shoes / Accessories) ---------- */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+}
+
+.navbar__links a {
+  position: relative;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding-block: 0.3em;
+}
+
+/* Underline that grows in on hover instead of just changing color -
+   a small detail that feels more intentional than a plain color swap. */
+.navbar__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-brick);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+}
+
+.navbar__links a:hover::after,
+.navbar__links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ---------- SEARCH BAR ---------- */
+.navbar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  background-color: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.5em 1em;
+  width: 240px;
+  transition: width var(--transition-base), border-color var(--transition-base);
+}
+
+.navbar__search:focus-within {
+  width: 300px;
+  border-color: var(--color-ink);
+}
+
+.navbar__search input {
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  width: 100%;
+  color: var(--color-ink);
+}
+
+.navbar__search input::placeholder {
+  color: var(--color-muted);
+}
+
+.navbar__search svg {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+
+/* ---------- ICON ACTIONS (wishlist / account / cart) ---------- */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.navbar__icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--color-ink);
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__icon-btn:hover {
+  background-color: var(--color-bg-alt);
+}
+
+/* Small numbered dot on the cart icon, e.g. "2" items in cart.
+   Cart module (Module 4) will update this number dynamically later -
+   for now it's a static placeholder so the layout is ready for them. */
+.navbar__icon-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding-inline: 3px;
+  border-radius: 999px;
+  background-color: var(--color-brick);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 16px;
+  text-align: center;
+}
+
+/* ---------- MOBILE MENU TOGGLE ---------- */
+.navbar__toggle {
+  display: none; /* hidden on desktop, shown below in the media query */
+  flex-direction: column;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__toggle span {
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-ink);
+  transition: transform var(--transition-base), opacity var(--transition-base);
+}
+
+/* When JS adds the "is-open" class to <body>, morph the hamburger into an X */
+body.is-open .navbar__toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+body.is-open .navbar__toggle span:nth-child(2) {
+  opacity: 0;
+}
+body.is-open .navbar__toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .navbar__search {
+    display: none; /* keep the mobile nav simple; search can move into the
+                       slide-out menu later once Module 2 builds real search */
+  }
+
+  .navbar__toggle {
+    display: flex;
+  }
+
+  /* Off-canvas link list: hidden off to the right until opened */
+  .navbar__links {
+    position: fixed;
+    inset: 0 0 0 30%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    background-color: var(--color-bg);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    border-left: 1px solid var(--color-line);
+  }
+
+  body.is-open .navbar__links {
+    transform: translateX(0);
+  }
+
+  .navbar__links a {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+  }
+}

@@ -1,0 +1,229 @@
+/* ==========================================================================
+   CART.CSS
+   ------------------------------------------------------------------------
+   Styles that ONLY apply to cart.html: the cart item list and the order
+   summary panel (subtotal/tax/shipping/discount/total + coupon field).
+   The quantity stepper (.qty-stepper) is already defined in
+   css/product-details.css and reused here as-is.
+   ========================================================================== */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--space-xl);
+  align-items: flex-start;
+  padding-block: var(--space-lg) var(--space-2xl);
+}
+
+@media (max-width: 900px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 1. CART ITEM ROWS                                                       */
+/* ---------------------------------------------------------------------- */
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.cart-item__photo {
+  width: 100px;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: var(--color-card);
+}
+
+.cart-item__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item__brand {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.cart-item__name {
+  font-weight: 600;
+  margin-block: 0.15em 0.3em;
+}
+
+.cart-item__variant {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.cart-item__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.cart-item__remove {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-brick);
+  text-decoration: underline;
+}
+
+.cart-item__price-col {
+  text-align: right;
+}
+
+.cart-item__line-total {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+}
+
+.cart-item__unit-price {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+@media (max-width: 560px) {
+  .cart-item {
+    grid-template-columns: 80px 1fr;
+  }
+  .cart-item__price-col {
+    grid-column: 2;
+    text-align: left;
+    margin-top: var(--space-xs);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. ORDER SUMMARY PANEL                                                  */
+/* ---------------------------------------------------------------------- */
+
+.order-summary {
+  position: sticky;
+  top: calc(72px + var(--space-md));
+  background-color: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.order-summary h2 {
+  font-size: 1.3rem;
+  margin-bottom: var(--space-md);
+}
+
+.order-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  padding-block: 0.4em;
+  color: var(--color-ink-soft);
+}
+
+.order-summary__row--discount {
+  color: #4f7a4f;
+}
+
+.order-summary__row--total {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  color: var(--color-ink);
+  font-weight: 700;
+  border-top: 1px solid var(--color-line);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+}
+
+.order-summary__shipping-note {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  margin-top: -0.3em;
+  margin-bottom: var(--space-sm);
+}
+
+/* Coupon code field */
+.coupon-form {
+  display: flex;
+  gap: var(--space-xs);
+  margin-block: var(--space-md);
+}
+
+.coupon-form input {
+  flex: 1;
+  padding: 0.7em 0.9em;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.coupon-msg {
+  font-size: 0.78rem;
+  min-height: 1.2em;
+  margin-top: -0.6em;
+  margin-bottom: var(--space-sm);
+}
+
+.coupon-msg--success {
+  color: #4f7a4f;
+}
+
+.coupon-msg--error {
+  color: var(--color-brick);
+}
+
+.order-summary .btn--primary {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+.cart-clear {
+  display: block;
+  text-align: center;
+  margin-top: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. EMPTY CART STATE                                                     */
+/* ---------------------------------------------------------------------- */
+
+.cart-empty {
+  text-align: center;
+  padding-block: var(--space-2xl);
+}
+
+.cart-empty h1 {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}
+
+.cart-empty p {
+  margin-bottom: var(--space-md);
+}

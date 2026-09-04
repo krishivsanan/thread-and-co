@@ -1,0 +1,129 @@
+/* ==========================================================================
+   FOOTER.CSS
+   ------------------------------------------------------------------------
+   Styles for the site footer defined in index.html.
+   Same rule as the navbar: copy the <footer class="footer">...</footer>
+   markup into every new page so the footer stays consistent site-wide.
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  padding-block: var(--space-xl) var(--space-md);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid rgba(242, 237, 228, 0.15);
+}
+
+.footer__brand .navbar__logo {
+  color: var(--color-bg);
+}
+
+.footer__brand p {
+  color: rgba(242, 237, 228, 0.65);
+  margin-top: var(--space-xs);
+  max-width: 32ch;
+}
+
+.footer__heading {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-mustard);
+  margin-bottom: var(--space-sm);
+}
+
+.footer__links li {
+  margin-bottom: var(--space-xs);
+}
+
+.footer__links a {
+  color: rgba(242, 237, 228, 0.75);
+  font-size: 0.9rem;
+  transition: color var(--transition-fast);
+}
+
+.footer__links a:hover {
+  color: var(--color-bg);
+}
+
+/* Newsletter mini-form - real submit logic will come from Module 6
+   (Auth & Backend) once there's an API to send this to. For now js/main.js
+   just prevents the page from reloading and shows a friendly message. */
+.footer__newsletter-form {
+  display: flex;
+  margin-top: var(--space-xs);
+  border-bottom: 1px solid rgba(242, 237, 228, 0.4);
+  padding-bottom: 0.4em;
+}
+
+.footer__newsletter-form input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.footer__newsletter-form input::placeholder {
+  color: rgba(242, 237, 228, 0.5);
+}
+
+.footer__newsletter-form button {
+  color: var(--color-mustard);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer__newsletter-msg {
+  margin-top: var(--space-xs);
+  font-size: 0.8rem;
+  color: var(--color-mustard);
+  min-height: 1.2em; /* reserves space so layout doesn't jump when the message appears */
+}
+
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  font-size: 0.8rem;
+  color: rgba(242, 237, 228, 0.5);
+}
+
+.footer__socials {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.footer__socials a {
+  color: rgba(242, 237, 228, 0.7);
+  transition: color var(--transition-fast);
+}
+
+.footer__socials a:hover {
+  color: var(--color-mustard);
+}
+
+@media (max-width: 800px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+}

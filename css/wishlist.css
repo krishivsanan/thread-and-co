@@ -1,0 +1,53 @@
+/* ==========================================================================
+   WISHLIST.CSS
+   ------------------------------------------------------------------------
+   Styles that ONLY apply to wishlist.html. The product cards themselves
+   reuse .product-grid/.product-card from css/components.css - this file
+   just adds the "Move to cart" action row under each card and the empty
+   state.
+   ========================================================================== */
+
+/* Wishlist cards get a small two-button row instead of the catalogue's
+   single "Add to cart" button, so this overrides just that part of
+   .product-card__body from components.css. */
+.wishlist-card__actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.wishlist-card__actions .btn--primary {
+  flex: 1;
+}
+
+.wishlist-remove-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.wishlist-remove-btn:hover {
+  border-color: var(--color-brick);
+  color: var(--color-brick);
+}
+
+.wishlist-empty {
+  text-align: center;
+  padding-block: var(--space-2xl);
+}
+
+.wishlist-empty h1 {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}
+
+.wishlist-empty p {
+  margin-bottom: var(--space-md);
+}

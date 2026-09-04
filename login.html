@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Account | Thread & Co.</title>
+
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Login CSS -->
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+
+  <header class="navbar">
+
+    <p class="navbar__announcement">
+      Free shipping on orders over $50
+      &nbsp;•&nbsp;
+      New drops every Friday
+    </p>
+
+    <div class="container navbar__row">
+
+      <a href="index.html" class="navbar__logo">
+        Thread<span>&</span>Co.
+      </a>
+
+      <nav aria-label="Main navigation">
+
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+
+          <li>
+            <a href="products.html?category=men">
+              Men
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=women">
+              Women
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=shoes">
+              Shoes
+            </a>
+          </li>
+
+          <li>
+            <a href="products.html?category=accessories">
+              Accessories
+            </a>
+          </li>
+        </ul>
+
+      </nav>
+
+
+      <div class="navbar__actions">
+
+        <!-- Wishlist -->
+
+        <a
+          href="wishlist.html"
+          class="navbar__icon-btn"
+          aria-label="Wishlist"
+        >
+
+          ♡
+
+        </a>
+
+
+        <!-- Account -->
+
+        <a
+          href="login.html"
+          class="navbar__icon-btn"
+          aria-label="Account"
+        >
+
+          ♙
+
+        </a>
+
+
+        <!-- Cart -->
+
+        <a
+          href="cart.html"
+          class="navbar__icon-btn"
+          aria-label="Cart"
+        >
+
+          🛒
+
+          <span
+            class="navbar__icon-badge"
+            hidden
+          >
+            0
+          </span>
+
+        </a>
+
+      </div>
+
+
+      <button
+        class="navbar__toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- ================= MAIN ================= -->
+
+  <main class="account-page">
+
+    <div class="container account-layout">
+
+
+      <!-- LEFT SIDE -->
+
+      <section class="account-intro">
+
+        <p class="account-intro__eyebrow">
+          YOUR THREAD & CO. ACCOUNT
+        </p>
+
+        <h1>
+          Made for your
+          <span>everyday.</span>
+        </h1>
+
+        <p class="account-intro__text">
+          Sign in to keep track of your orders,
+          save your favourite pieces and make
+          every checkout a little easier.
+        </p>
+
+
+        <div class="account-benefits">
+
+          <div class="account-benefit">
+
+            <span>01</span>
+
+            <div>
+              <strong>
+                Faster checkout
+              </strong>
+
+              <p>
+                Keep your details ready for your next order.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="account-benefit">
+
+            <span>02</span>
+
+            <div>
+              <strong>
+                Save your favourites
+              </strong>
+
+              <p>
+                Build a wishlist of pieces you love.
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="account-benefit">
+
+            <span>03</span>
+
+            <div>
+              <strong>
+                Track your orders
+              </strong>
+
+              <p>
+                Stay updated from checkout to delivery.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RIGHT SIDE -->
+
+      <section class="account-card">
+
+
+        <!-- FORM HEADER -->
+
+        <div class="account-card__header">
+
+          <p class="account-card__eyebrow">
+            WELCOME BACK
+          </p>
+
+          <h2 id="form-title">
+            Sign in
+          </h2>
+
+          <p id="form-subtitle">
+            Enter your details to continue shopping.
+          </p>
+
+        </div>
+
+
+        <!-- ================= LOGIN FORM ================= -->
+
+        <form
+          id="login-form"
+          class="account-form"
+        >
+
+          <div class="account-field">
+
+            <label for="login-email">
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="login-email"
+              placeholder="you@example.com"
+              required
+            >
+
+          </div>
+
+
+          <div class="account-field">
+
+            <div class="password-label">
+
+              <label for="login-password">
+                Password
+              </label>
+
+              <a href="#" class="forgot-password">
+                Forgot password?
+              </a>
+
+            </div>
+
+
+            <div class="password-input">
+
+              <input
+                type="password"
+                id="login-password"
+                placeholder="Enter your password"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-target="login-password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="remember-row">
+
+            <label>
+
+              <input
+                type="checkbox"
+                id="remember-me"
+              >
+
+              <span>
+                Remember me
+              </span>
+
+            </label>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="btn btn--primary account-submit"
+          >
+            Sign in
+          </button>
+
+        </form>
+
+
+        <!-- ================= SIGNUP FORM ================= -->
+
+        <form
+          id="signup-form"
+          class="account-form"
+          hidden
+        >
+
+          <div class="account-field">
+
+            <label for="signup-name">
+              Full name
+            </label>
+
+            <input
+              type="text"
+              id="signup-name"
+              placeholder="Your full name"
+              required
+            >
+
+          </div>
+
+
+          <div class="account-field">
+
+            <label for="signup-email">
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="signup-email"
+              placeholder="you@example.com"
+              required
+            >
+
+          </div>
+
+
+          <div class="account-field">
+
+            <label for="signup-password">
+              Password
+            </label>
+
+            <div class="password-input">
+
+              <input
+                type="password"
+                id="signup-password"
+                placeholder="Create a password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-target="signup-password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="account-field">
+
+            <label for="confirm-password">
+              Confirm password
+            </label>
+
+            <div class="password-input">
+
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm your password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-target="confirm-password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="btn btn--primary account-submit"
+          >
+            Create account
+          </button>
+
+        </form>
+
+
+        <!-- SWITCH -->
+
+        <div class="account-switch">
+
+          <span id="switch-text">
+            New to Thread & Co.?
+          </span>
+
+          <button
+            type="button"
+            id="switch-form-btn"
+          >
+            Create an account
+          </button>
+
+        </div>
+
+
+        <p
+          id="account-message"
+          class="account-message"
+          aria-live="polite"
+        ></p>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer class="footer">
+
+    <div class="container">
+
+      <div class="footer__grid">
+
+
+        <div class="footer__brand">
+
+          <a
+            href="index.html"
+            class="navbar__logo"
+          >
+            Thread<span>&</span>Co.
+          </a>
+
+          <p>
+            Considered clothing for the way you
+            actually live, work and move.
+          </p>
+
+        </div>
+
+
+        <nav>
+
+          <h3 class="footer__heading">
+            Shop
+          </h3>
+
+          <ul class="footer__links">
+
+            <li>
+              <a href="products.html?category=men">
+                Men
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=women">
+                Women
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=shoes">
+                Shoes
+              </a>
+            </li>
+
+            <li>
+              <a href="products.html?category=accessories">
+                Accessories
+              </a>
+            </li>
+
+          </ul>
+
+        </nav>
+
+
+        <nav>
+
+          <h3 class="footer__heading">
+            Help
+          </h3>
+
+          <ul class="footer__links">
+
+            <li><a href="#">Track order</a></li>
+
+            <li>
+              <a href="#">
+                Shipping &amp; returns
+              </a>
+            </li>
+
+            <li><a href="#">FAQ</a></li>
+
+            <li><a href="#">Contact us</a></li>
+
+          </ul>
+
+        </nav>
+
+
+        <div>
+
+          <h3 class="footer__heading">
+            Stay in the loop
+          </h3>
+
+          <p class="footer-text">
+            Sign up for 10% off your first order.
+          </p>
+
+          <form class="footer__newsletter-form">
+
+            <input
+              type="email"
+              placeholder="you@example.com"
+            >
+
+            <button type="submit">
+              Join
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer__bottom">
+
+        <p>
+          © 2026 Thread &amp; Co.
+        </p>
+
+        <div class="footer__socials">
+
+          <a href="#">IG</a>
+          <a href="#">PIN</a>
+          <a href="#">TT</a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script src="js/main.js"></script>
+
+  <script src="js/login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+/* ==========================================================================
+   PRODUCT-DETAILS.CSS
+   ------------------------------------------------------------------------
+   Styles that ONLY apply to product-details.html (Module 3): image
+   gallery, color/size selectors, quantity stepper, stock messaging, and
+   the description/specifications/reviews tabs.
+
+   The quantity stepper (.qty-stepper) is written generically enough
+   that Module 4 (Cart) can reuse it as-is for adjusting quantities in
+   the cart - if it does, move that block into css/components.css the
+   same way product-card styles were moved there in Module 2.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* 1. PAGE LAYOUT: gallery + info panel side by side                      */
+/* ---------------------------------------------------------------------- */
+
+.pd-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  padding-block: var(--space-md) var(--space-2xl);
+}
+
+@media (max-width: 900px) {
+  .pd-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. IMAGE GALLERY                                                       */
+/* ---------------------------------------------------------------------- */
+
+.pd-gallery__main {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-card);
+  margin-bottom: var(--space-sm);
+}
+
+.pd-gallery__main img,
+.pd-gallery__main .img-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xs);
+}
+
+.pd-gallery__thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background-color: var(--color-card);
+}
+
+.pd-gallery__thumb img,
+.pd-gallery__thumb .img-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-gallery__thumb.is-active {
+  border-color: var(--color-brick);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. INFO PANEL                                                          */
+/* ---------------------------------------------------------------------- */
+
+.pd-info__brand {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.pd-info__title {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  margin-block: 0.2em 0.5em;
+}
+
+.pd-info__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.88rem;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.pd-info__rating svg {
+  color: var(--color-mustard);
+}
+
+.pd-info__rating button {
+  color: var(--color-brick);
+  text-decoration: underline;
+  font-size: 0.85rem;
+}
+
+.pd-info__price {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  margin-bottom: var(--space-md);
+}
+
+.pd-info__price del {
+  color: var(--color-muted);
+  font-size: 1rem;
+  margin-right: 0.4em;
+}
+
+.pd-info__section {
+  margin-bottom: var(--space-md);
+}
+
+.pd-info__label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-xs);
+  display: flex;
+  gap: 0.5em;
+}
+
+.pd-info__label .selected-value {
+  color: var(--color-muted);
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-body);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 4. QUANTITY STEPPER                                                    */
+/* ---------------------------------------------------------------------- */
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.qty-stepper button {
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+  transition: background-color var(--transition-fast);
+}
+
+.qty-stepper button:hover:not(:disabled) {
+  background-color: var(--color-bg-alt);
+}
+
+.qty-stepper button:disabled {
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.qty-stepper input {
+  width: 44px;
+  height: 40px;
+  text-align: center;
+  border: none;
+  border-inline: 1px solid var(--color-line-strong);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  /* hide the native up/down number arrows so our own buttons are the
+     only way to change the value, keeping the control's behavior
+     predictable */
+  -moz-appearance: textfield;
+}
+
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 5. STOCK STATUS MESSAGE                                                */
+/* ---------------------------------------------------------------------- */
+
+.pd-stock {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.pd-stock::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pd-stock--in::before {
+  background-color: #4f7a4f;
+}
+.pd-stock--in {
+  color: #4f7a4f;
+}
+
+.pd-stock--low::before {
+  background-color: var(--color-mustard);
+}
+.pd-stock--low {
+  color: #8c6a24;
+}
+
+.pd-stock--out::before {
+  background-color: var(--color-brick);
+}
+.pd-stock--out {
+  color: var(--color-brick);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 6. ACTION ROW (add to cart + wishlist)                                 */
+/* ---------------------------------------------------------------------- */
+
+.pd-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block: var(--space-md);
+}
+
+.pd-actions .btn--primary {
+  flex: 1;
+}
+
+.pd-wishlist-btn {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1.5px var(--color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  transition: color var(--transition-fast);
+}
+
+.pd-wishlist-btn.is-active svg {
+  fill: var(--color-brick);
+  stroke: var(--color-brick);
+}
+
+/* Small inline validation message, e.g. "Please select a size" */
+.pd-validation {
+  color: var(--color-brick);
+  font-size: 0.8rem;
+  min-height: 1.2em;
+  margin-top: -0.4em;
+  margin-bottom: var(--space-sm);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 7. TABS: Description / Specifications / Reviews                        */
+/* ---------------------------------------------------------------------- */
+
+.pd-tabs {
+  margin-top: var(--space-xl);
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-lg);
+}
+
+.pd-tabs__nav {
+  display: flex;
+  gap: var(--space-lg);
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: var(--space-lg);
+}
+
+.pd-tabs__btn {
+  padding-bottom: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.pd-tabs__btn.is-active {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-brick);
+}
+
+.pd-tabs__panel {
+  display: none;
+  max-width: 70ch;
+}
+
+.pd-tabs__panel.is-active {
+  display: block;
+}
+
+.pd-tabs__panel p {
+  margin-bottom: var(--space-sm);
+}
+
+/* Specifications table */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.spec-table tr {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.spec-table th,
+.spec-table td {
+  text-align: left;
+  padding-block: var(--space-xs);
+  font-size: 0.9rem;
+}
+
+.spec-table th {
+  width: 40%;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+}
+
+/* Reviews list */
+.review {
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.review:first-child {
+  padding-top: 0;
+}
+
+.review__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4em;
+}
+
+.review__author {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.review__date {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.review__stars {
+  display: flex;
+  gap: 2px;
+  color: var(--color-mustard);
+  margin-bottom: 0.5em;
+}
+
+.review__stars svg[data-filled="false"] {
+  color: var(--color-line-strong);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 8. RELATED PRODUCTS                                                    */
+/* ---------------------------------------------------------------------- */
+
+.pd-related {
+  padding-block: var(--space-2xl);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 9. NOT FOUND STATE (bad/missing ?id= in the URL)                       */
+/* ---------------------------------------------------------------------- */
+
+.pd-not-found {
+  text-align: center;
+  padding-block: var(--space-2xl);
+}
+
+.pd-not-found h1 {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}

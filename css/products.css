@@ -1,0 +1,331 @@
+/* ==========================================================================
+   PRODUCTS.CSS
+   ------------------------------------------------------------------------
+   Styles that ONLY apply to products.html (the catalogue/listing page):
+   filter sidebar, toolbar (result count + sort), and the "no results"
+   empty state. The product cards are styled in css/components.css since
+   Home uses them too; .breadcrumb/.page-header moved there as well once
+   product-details.html and cart.html needed them too.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* 2. LAYOUT: sidebar + product grid, side by side                        */
+/* ---------------------------------------------------------------------- */
+
+.catalogue-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-xl);
+  align-items: flex-start;
+  padding-bottom: var(--space-2xl);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. FILTER SIDEBAR                                                      */
+/* ---------------------------------------------------------------------- */
+
+.filters {
+  position: sticky;
+  top: calc(72px + var(--space-md)); /* clears the sticky navbar above it */
+  background-color: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.filters__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.filters__header h2 {
+  font-size: 1.1rem;
+}
+
+.filters__clear {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-brick);
+}
+
+.filter-group {
+  padding-block: var(--space-sm);
+  border-top: 1px solid var(--color-line);
+}
+
+.filter-group:first-of-type {
+  border-top: none;
+}
+
+.filter-group__title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-xs);
+}
+
+/* Checkbox rows (Category, Brand, Price) */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding-block: 0.35em;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-brick); /* recolors the native checkbox/radio to match the brand */
+  cursor: pointer;
+}
+
+.filter-option span {
+  flex: 1;
+}
+
+.filter-option .count {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* Size chips (S, M, L, 9, 10, One Size...) */
+.size-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.size-chip {
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.4em 0.7em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.size-chip:hover {
+  border-color: var(--color-ink);
+}
+
+.size-chip.is-selected {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  border-color: var(--color-ink);
+}
+
+/* Color swatches (small circles) */
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+}
+
+.color-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px var(--color-line-strong);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-swatch.is-selected {
+  border-color: var(--color-brick);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 4. TOOLBAR (result count + sort dropdown + mobile "Filters" button)    */
+/* ---------------------------------------------------------------------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.toolbar__count {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+.toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.toolbar__sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.toolbar__sort select {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.5em 0.8em;
+  background-color: var(--color-card);
+}
+
+/* Mobile-only button that opens the filter sidebar as a drawer */
+.toolbar__filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.5em;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.6em 1em;
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 4B. FILTER DRAWER BACKDROP (mobile only)                                */
+/* ---------------------------------------------------------------------- */
+
+/* IMPORTANT: this element exists in the HTML on every screen size, but it
+   should only ever be visible as an overlay on mobile (see the
+   @media block below). Without this base "display: none" rule, this
+   empty <div> silently became a THIRD item inside the 2-column
+   .catalogue-layout grid, which pushed the whole toolbar+product-grid
+   wrapper onto its own row squeezed into the 260px sidebar column -
+   that was the "everything is squished/overlapping" bug. Removing an
+   element with display:none takes it out of layout entirely, so it no
+   longer counts as a grid item here. */
+.filters-backdrop {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 5. ACTIVE FILTER CHIPS (shown above the grid once filters are applied) */
+/* ---------------------------------------------------------------------- */
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: var(--space-md);
+}
+
+.active-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  border-radius: 999px;
+  padding: 0.35em 0.5em 0.35em 0.9em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.active-filter-chip button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: rgba(242, 237, 228, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-bg);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 6. EMPTY STATE (no products match the current filters)                 */
+/* ---------------------------------------------------------------------- */
+
+.empty-state {
+  text-align: center;
+  padding-block: var(--space-2xl);
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-md);
+}
+
+.empty-state h3 {
+  font-size: 1.6rem;
+  margin-bottom: var(--space-xs);
+}
+
+.empty-state p {
+  margin-bottom: var(--space-md);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 7. RESPONSIVE - collapse sidebar into a slide-out drawer on mobile     */
+/* ---------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .catalogue-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar__filter-toggle {
+    display: inline-flex;
+  }
+
+  .filters {
+    position: fixed;
+    inset: 0 20% 0 0;
+    z-index: 200;
+    border-radius: 0;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+  }
+
+  /* JS toggles this class on <body> to slide the drawer into view */
+  body.filters-open .filters {
+    transform: translateX(0);
+  }
+
+  /* Dimmed backdrop behind the open drawer - also closes it when clicked */
+  .filters-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background-color: rgba(28, 27, 26, 0.4);
+  }
+
+  body.filters-open .filters-backdrop {
+    display: block;
+  }
+
+  /* The "Close" button inside the drawer is only useful once the sidebar
+     becomes an overlay, so it stays hidden on desktop (see the inline
+     style in products.html) and only appears here on mobile. */
+  #close-filters {
+    display: inline-flex !important;
+  }
+}

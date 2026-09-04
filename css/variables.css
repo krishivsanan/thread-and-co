@@ -1,0 +1,77 @@
+/* ==========================================================================
+   VARIABLES.CSS
+   ------------------------------------------------------------------------
+   This file holds every design "token" (color, font, spacing) used on the
+   whole website - not just the homepage.
+
+   WHY THIS FILE EXISTS:
+   When 6 people build 6 different pages, colors/fonts drift apart unless
+   everyone pulls from the SAME source. So: every other CSS file in this
+   project should use these variables (var(--color-ink) etc.) instead of
+   typing hex codes directly. That way, if we ever want to change the
+   brand color, we change it here ONCE and the whole site updates.
+
+   HOW TO USE THIS IN YOUR OWN MODULE (Products, Cart, Checkout, etc.):
+   1. Copy this file as-is into your page's <head>, e.g.:
+        <link rel="stylesheet" href="css/variables.css">
+   2. Use the variables like this in your own CSS:
+        .my-button { background: var(--color-brick); }
+   ========================================================================== */
+
+:root {
+  /* ---------- COLORS ----------
+     Theme: an "editorial fashion catalogue" look - warm linen background,
+     near-black ink for text, a brick-red accent (think stitched clothing
+     labels) and a mustard-gold accent for sale/new tags. */
+
+  --color-bg: #f2ede4;          /* main page background (warm linen) */
+  --color-bg-alt: #e8e1d3;      /* slightly darker background for alternating sections */
+  --color-card: #fbf8f2;        /* card / surface background, sits on top of --color-bg */
+
+  --color-ink: #1c1b1a;         /* main text color (near-black, not pure black) */
+  --color-ink-soft: #4a453e;    /* secondary text (paragraphs, descriptions) */
+  --color-muted: #8c8477;       /* tertiary text (meta info, timestamps, helper text) */
+
+  --color-brick: #a63d40;       /* primary brand accent - buttons, links, focus states */
+  --color-brick-dark: #7e2d30;  /* hover/active state for brick elements */
+  --color-mustard: #d9a441;     /* secondary accent - "new", "sale" tags, highlights */
+
+  --color-line: rgba(28, 27, 26, 0.12);   /* hairline borders / dividers */
+  --color-line-strong: rgba(28, 27, 26, 0.28);
+
+  --color-white: #ffffff;
+
+  /* ---------- FONTS ----------
+     Display : big, condensed, poster-like -> used for headlines only
+     Body    : clean and easy to read at small sizes -> paragraphs, nav, buttons
+     Mono    : looks like a printed price tag / label -> prices, badges, eyebrows */
+
+  --font-display: "Bebas Neue", "Archivo Black", sans-serif;
+  --font-body: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Space Mono", "Courier New", monospace;
+
+  /* ---------- SPACING SCALE ----------
+     Stick to these instead of random pixel values, so spacing stays
+     consistent across every page the team builds. */
+
+  --space-2xs: 0.4rem;
+  --space-xs: 0.8rem;
+  --space-sm: 1.2rem;
+  --space-md: 2rem;
+  --space-lg: 3.2rem;
+  --space-xl: 5.6rem;
+  --space-2xl: 8rem;
+
+  /* ---------- LAYOUT ---------- */
+  --container-width: 1240px;
+  --radius-sm: 4px;
+  --radius-md: 10px;
+
+  /* ---------- SHADOW ---------- */
+  --shadow-card: 0 8px 24px rgba(28, 27, 26, 0.08);
+  --shadow-card-hover: 0 16px 32px rgba(28, 27, 26, 0.14);
+
+  /* ---------- TRANSITIONS ---------- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}

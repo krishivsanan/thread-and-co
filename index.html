@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  INDEX.HTML  -  Module 1: Home & Navigation
+  ----------------------------------------------------------------------------
+  Owns: Navbar, Footer, Homepage sections (Hero, Categories, Featured
+  Products, New Arrivals, Offer banner, Perks strip).
+
+  HOW OTHER MODULES SHOULD USE THIS FILE:
+  - The <header class="navbar"> block and the <footer class="footer"> block
+    below are meant to be copy-pasted, AS-IS, into every other page
+    (products.html, cart.html, checkout.html, etc.) so navigation looks
+    and behaves the same across the whole site.
+  - Update the "current page" link inside .navbar__links with an
+    class="is-active" (see the Home link below) so each page highlights
+    itself in the nav.
+  - Always link css/variables.css and css/base.css FIRST, before your own
+    page's CSS file, so you inherit the shared design tokens.
+  ============================================================================
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thread & Co. | Clothing for the way you live</title>
+    <meta
+      name="description"
+      content="Shop new-season clothing, shoes and accessories for men and women at Thread & Co."
+    />
+
+    <!-- ---------- STYLESHEETS ----------
+         Load order matters: tokens -> shared base -> shared components -> page-specific -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/home.css" />
+  </head>
+
+  <body>
+    <!-- ======================================================================
+         NAVBAR  (shared across every page - copy this whole <header> block)
+         ====================================================================== -->
+    <header class="navbar">
+      <!-- Thin promo strip -->
+      <p class="navbar__announcement">Free shipping on orders over $50 &nbsp;•&nbsp; New drops every Friday</p>
+
+      <div class="container navbar__row">
+        <!-- Logo / brand name links back to the homepage -->
+        <a href="index.html" class="navbar__logo">Thread<span>&</span>Co.</a>
+
+        <!-- Main nav links.
+             NOTE for teammates: these hrefs point to pages that OTHER
+             modules will create. Until those files exist, clicking them
+             will 404 - that's expected at this stage of the project. -->
+        <nav aria-label="Main">
+          <ul class="navbar__links">
+            <li><a href="index.html" class="is-active">Home</a></li>
+            <!-- These link to products.html with a ?category= filter already
+                 applied - see js/products.js "Read the URL" section, which
+                 pre-checks the matching category checkbox on page load. -->
+            <li><a href="products.html?category=men">Men</a></li>
+            <li><a href="products.html?category=women">Women</a></li>
+            <li><a href="products.html?category=shoes">Shoes</a></li>
+            <li><a href="products.html?category=accessories">Accessories</a></li>
+          </ul>
+        </nav>
+
+        <!-- Search bar (UI only for now - Module 2 wires up real search/filter logic) -->
+        <form class="navbar__search" role="search" action="products.html" method="get">
+          <label for="site-search" class="visually-hidden">Search products</label>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="search" id="site-search" name="q" placeholder="Search products..." />
+        </form>
+
+        <!-- Wishlist / Account / Cart icon buttons -->
+        <div class="navbar__actions">
+          <a href="wishlist.html" class="navbar__icon-btn" aria-label="Wishlist">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z"
+              />
+            </svg>
+          </a>
+
+          <a href="login.html" class="navbar__icon-btn" aria-label="Account">
+            <!-- Module 6 (Authentication) will build login.html -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6" />
+            </svg>
+          </a>
+
+          <a href="cart.html" class="navbar__icon-btn" aria-label="Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6" />
+            </svg>
+            <!-- Static placeholder count - Module 4 will make this dynamic -->
+            <span class="navbar__icon-badge" hidden>0</span>
+          </a>
+        </div>
+
+        <!-- Hamburger button for mobile - controlled by js/main.js -->
+        <button class="navbar__toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- ====================================================================
+           1. HERO SECTION
+           ==================================================================== -->
+      <section class="container hero">
+        <div class="hero__content">
+          <p class="hero__eyebrow">
+            <span class="tag tag--brick">SS26</span>
+            <span class="eyebrow">New season collection</span>
+          </p>
+
+          <h1 class="hero__title">Dress for<br />the life <span class="line-accent">you're</span><br />living.</h1>
+
+          <p class="hero__subtitle">
+            Considered basics and standout pieces for men and women - built from fabrics
+            that move with you, priced for actually wearing them.
+          </p>
+
+          <div class="hero__actions">
+            <a href="products.html" class="btn btn--primary">Shop new arrivals</a>
+            <a href="#featured" class="link-underline">See what's trending →</a>
+          </div>
+        </div>
+
+        <!-- Visual side: two placeholder photo panels + a floating tag,
+             standing in for a real campaign photo until product images exist -->
+        <div class="hero__visual" aria-hidden="true">
+          <!-- <img class="hero__panel hero__panel--back" src="assets/images/site/hero-back.jpg" alt="Campaign photo" /> -->
+          <img class="hero__panel hero__panel--front" src="IMG/campaign.png" alt="Campaign photo" />
+          <div class="hero__floating-tag">
+            <strong>30%</strong>
+            <span>Off first order</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           2. SHOP BY CATEGORY
+           ==================================================================== -->
+      <section class="section container" aria-labelledby="categories-heading">
+        <div class="section-heading">
+          <h2 id="categories-heading">Shop by category</h2>
+          <p class="eyebrow">4 departments</p>
+        </div>
+
+        <div class="categories__grid">
+          <!-- Each category links to a page a teammate on Module 2 will build -->
+          <a href="products.html?category=men" class="category-card">
+            <img src="IMG/men.png" alt="Men" />
+            <div class="category-card__label"><span>Shop</span><strong>Men</strong></div>
+          </a>
+
+          <a href="products.html?category=women" class="category-card">
+            <img src="IMG/women.png" alt="Women" />
+            <div class="category-card__label"><span>Shop</span><strong>Women</strong></div>
+          </a>
+
+          <a href="products.html?category=shoes" class="category-card">
+            <img src="IMG/SHOES.png" alt="Shoes" />
+            <div class="category-card__label"><span>Shop</span><strong>Shoes</strong></div>
+          </a>
+
+          <a href="products.html?category=accessories" class="category-card">
+            <img src="IMG/accessory.png" alt="Accessories" />
+            <div class="category-card__label"><span>Shop</span><strong>Accessories</strong></div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           3. FEATURED PRODUCTS
+           Static sample data for now - Module 2 (Product Catalogue) will
+           replace these hard-coded cards by rendering real product data
+           (from an array/API) with JavaScript instead.
+           ==================================================================== -->
+      <section class="section section--alt" id="featured" aria-labelledby="featured-heading">
+        <div class="container">
+          <div class="section-heading">
+            <h2 id="featured-heading">Featured products</h2>
+            <a href="products.html" class="link-underline">View all →</a>
+          </div>
+
+          <div class="product-grid">
+            <article class="product-card">
+              <a href="product-details.html?id=202" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1564595037946-dcb73763aa57?auto=format&fit=crop&w=900&q=80" alt="Cotton Oxford Shirt" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <button class="product-card__wishlist" data-product-id="202" aria-label="Add to wishlist" aria-pressed="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z" />
+                </svg>
+              </button>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=202">Cotton Oxford Shirt</a></h3>
+                <div class="product-card__meta">
+                  <span class="product-card__price">$58</span>
+                  <span class="product-card__rating">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9" /></svg>
+                    4.8
+                  </span>
+                </div>
+                <button class="btn btn--outline btn--sm product-card__add" data-product-id="202">Add to cart</button>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=203" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1656528049647-c82eb8174d04?auto=format&fit=crop&w=900&q=80" alt="Wool Blend Overcoat" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--brick">-20%</span></div>
+              </a>
+              <button class="product-card__wishlist" data-product-id="203" aria-label="Add to wishlist" aria-pressed="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z" />
+                </svg>
+              </button>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=203">Wool Blend Overcoat</a></h3>
+                <div class="product-card__meta">
+                  <span class="product-card__price"><del>$220</del>$176</span>
+                  <span class="product-card__rating">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9" /></svg>
+                    4.9
+                  </span>
+                </div>
+                <button class="btn btn--outline btn--sm product-card__add" data-product-id="203">Add to cart</button>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=204" class="product-card__photo">
+                <img src="https://cdn13.nnnow.com/web-images/large/styles/E0NWV0WWBMB/1754646926158/1.jpg" alt="Relaxed Denim Jeans" loading="lazy" />
+                <div class="product-card__tags"></div>
+              </a>
+              <button class="product-card__wishlist" data-product-id="204" aria-label="Add to wishlist" aria-pressed="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z" />
+                </svg>
+              </button>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=204">Relaxed Denim Jeans</a></h3>
+                <div class="product-card__meta">
+                  <span class="product-card__price">$72</span>
+                  <span class="product-card__rating">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9" /></svg>
+                    4.6
+                  </span>
+                </div>
+                <button class="btn btn--outline btn--sm product-card__add" data-product-id="204">Add to cart</button>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=401" class="product-card__photo">
+                <img src="https://assets.ajio.com/medias/sys_master/root/20230302/EBAX/6400caeeaeb26924e3a22bcc/-1117Wx1400H-410085935-068-MODEL2.jpg" alt="Canvas Low-Top Sneaker" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <button class="product-card__wishlist" data-product-id="401" aria-label="Add to wishlist" aria-pressed="false">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z" />
+                </svg>
+              </button>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=401">Canvas Low-Top Sneaker</a></h3>
+                <div class="product-card__meta">
+                  <span class="product-card__price">$64</span>
+                  <span class="product-card__rating">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9" /></svg>
+                    4.7
+                  </span>
+                </div>
+                <button class="btn btn--outline btn--sm product-card__add" data-product-id="401">Add to cart</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           4. NEW ARRIVALS - horizontal scroller
+           ==================================================================== -->
+      <section class="section container" aria-labelledby="new-arrivals-heading">
+        <div class="section-heading">
+          <h2 id="new-arrivals-heading">New arrivals</h2>
+          <div class="scroller__nav">
+            <button class="scroller__btn" data-scroll="prev" aria-label="Scroll left">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6" /></svg>
+            </button>
+            <button class="scroller__btn" data-scroll="next" aria-label="Scroll right">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="scroller">
+          <div class="scroller__track">
+            <!-- Reusing the same .product-card component from the Featured
+                 section above - only the outer wrapper (.scroller__track)
+                 changes how they lay out (sideways scroll vs grid). -->
+            <article class="product-card">
+              <a href="product-details.html?id=302" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1542595606-002fdcb90acf?auto=format&fit=crop&w=900&q=80" alt="Ribbed Knit Sweater" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=302">Ribbed Knit Sweater</a></h3>
+                <div class="product-card__meta"><span class="product-card__price">$48</span></div>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=301" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1552874869-5c39ec9288dc?auto=format&fit=crop&w=900&q=80" alt="Pleated Midi Skirt" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=301">Pleated Midi Skirt</a></h3>
+                <div class="product-card__meta"><span class="product-card__price">$54</span></div>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=402" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1616244916660-d135a013d1f8?auto=format&fit=crop&w=900&q=80" alt="Suede Ankle Boot" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=402">Suede Ankle Boot</a></h3>
+                <div class="product-card__meta"><span class="product-card__price">$96</span></div>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=501" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1567744875520-cf9c27fbb53b?auto=format&fit=crop&w=900&q=80" alt="Structured Tote Bag" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=501">Structured Tote Bag</a></h3>
+                <div class="product-card__meta"><span class="product-card__price">$88</span></div>
+              </div>
+            </article>
+
+            <article class="product-card">
+              <a href="product-details.html?id=304" class="product-card__photo">
+                <img src="https://images.unsplash.com/photo-1767631338127-8cd80ee2f9df?auto=format&fit=crop&w=900&q=80" alt="Linen Blend Trousers" loading="lazy" />
+                <div class="product-card__tags"><span class="tag tag--mustard">New</span></div>
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__brand">Thread &amp; Co.</p>
+                <h3 class="product-card__name"><a href="product-details.html?id=304">Linen Blend Trousers</a></h3>
+                <div class="product-card__meta"><span class="product-card__price">$66</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           5. OFFERS BANNER with live countdown
+           ==================================================================== -->
+      <section class="section container" aria-labelledby="offer-heading">
+        <div class="offer-banner">
+          <div>
+            <p class="eyebrow" style="color:var(--color-ink);">Limited time</p>
+            <h2 id="offer-heading" class="offer-banner__title">End of season sale - up to 40% off</h2>
+            <p class="offer-banner__subtitle">
+              Applies automatically at checkout. Stack it with your welcome coupon for even
+              more off your first order.
+            </p>
+
+            <!-- Countdown target/logic lives in js/home.js -->
+            <div class="countdown" aria-label="Offer ends in">
+              <div class="countdown__unit"><strong data-unit="hours">48</strong><span>Hours</span></div>
+              <div class="countdown__unit"><strong data-unit="minutes">00</strong><span>Minutes</span></div>
+              <div class="countdown__unit"><strong data-unit="seconds">00</strong><span>Seconds</span></div>
+            </div>
+
+            <a href="products.html" class="btn btn--primary" style="margin-top:var(--space-md);">Shop the sale</a>
+          </div>
+
+          <img class="offer-banner__visual" src="IMG/sale.png" alt="" aria-hidden="true" />
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           6. PERKS STRIP (shipping / returns / payment / support)
+           ==================================================================== -->
+      <section class="section container">
+        <div class="perks">
+          <div class="perk">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="7" width="14" height="10" rx="1" /><path d="M15 10h3l3 3v4h-6z" /><circle cx="6" cy="19" r="1.6" /><circle cx="17" cy="19" r="1.6" /></svg>
+            <div><strong>Free shipping</strong><p>On every order over $50</p></div>
+          </div>
+          <div class="perk">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 0 3-6.7" /><polyline points="3 4 3 9 8 9" /></svg>
+            <div><strong>Easy 30-day returns</strong><p>Free returns on unworn items</p></div>
+          </div>
+          <div class="perk">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2" /><line x1="2" y1="10" x2="22" y2="10" /></svg>
+            <div><strong>Secure payment</strong><p>Your details are always protected</p></div>
+          </div>
+          <div class="perk">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            <div><strong>24/7 support</strong><p>We're here whenever you need us</p></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ======================================================================
+         FOOTER  (shared across every page - copy this whole <footer> block)
+         ====================================================================== -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand">
+            <a href="index.html" class="navbar__logo">Thread<span>&</span>Co.</a>
+            <p>Considered clothing for the way you actually live, work and move.</p>
+          </div>
+
+          <nav aria-label="Shop">
+            <h3 class="footer__heading">Shop</h3>
+            <ul class="footer__links">
+              <li><a href="products.html?category=men">Men</a></li>
+              <li><a href="products.html?category=women">Women</a></li>
+              <li><a href="products.html?category=shoes">Shoes</a></li>
+              <li><a href="products.html?category=accessories">Accessories</a></li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Help">
+            <h3 class="footer__heading">Help</h3>
+            <ul class="footer__links">
+              <li><a href="#">Track order</a></li>
+              <li><a href="#">Shipping &amp; returns</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Contact us</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h3 class="footer__heading">Stay in the loop</h3>
+            <p style="color:rgba(242,237,228,0.65); font-size:0.85rem;">Sign up for 10% off your first order.</p>
+            <form class="footer__newsletter-form">
+              <label for="newsletter-email" class="visually-hidden">Email address</label>
+              <input type="email" id="newsletter-email" placeholder="you@example.com" required />
+              <button type="submit">Join</button>
+            </form>
+            <p class="footer__newsletter-msg" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="footer__bottom">
+          <p>&copy; 2026 Thread &amp; Co. Class project - not a real store.</p>
+          <div class="footer__socials">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Pinterest">PIN</a>
+            <a href="#" aria-label="TikTok">TT</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ---------- SCRIPTS ----------
+         main.js               = shared behavior (every page needs this)
+         store/cart-store.js    = cart + wishlist state (localStorage-backed) - every page needs this
+         shared/navbar-badges.js = keeps the navbar cart count in sync - every page needs this
+         home.js                 = behavior ONLY this page needs (leave out on other pages) -->
+    <script src="js/main.js"></script>
+    <script src="js/store/cart-store.js"></script>
+    <script src="js/shared/navbar-badges.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>

@@ -1,0 +1,249 @@
+/* ==========================================================================
+   COMPONENTS.CSS
+   ------------------------------------------------------------------------
+   Styles for reusable pieces of UI that appear on MORE THAN ONE page -
+   right now that's the product card grid (used on the Home page's
+   Featured/New Arrivals sections AND on the Products/Catalogue page) and
+   the horizontal "scroller" strip.
+
+   RULE OF THUMB for the team:
+   - Used on only ONE page?      -> put it in that page's own CSS file
+                                    (home.css, products.css, ...)
+   - Used on TWO OR MORE pages?  -> put it here instead, so nobody has to
+                                    keep two copies of the same CSS in sync.
+
+   Load this AFTER base.css/navbar.css/footer.css and BEFORE your page's
+   own CSS file, so your page-specific rules can still override a detail
+   here if it ever needs to.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* 1. PRODUCT CARD ("garment tag" style)                                  */
+/* ---------------------------------------------------------------------- */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+/* Each card is shaped like a real clothing swing-tag: a punched circle
+   cut out of the top-left corner and a dashed "stitch" line separating
+   the photo from the details, tying the card design back to the subject
+   (clothing) instead of using a generic e-commerce card. */
+.product-card {
+  position: relative;
+  background-color: var(--color-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+}
+
+.product-card__photo {
+  display: block;
+  position: relative;
+  aspect-ratio: 3 / 4;
+}
+
+.product-card__photo .img-placeholder {
+  position: absolute;
+  inset: 0;
+}
+
+.product-card__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills the frame without distorting the photo */
+}
+
+.product-card__tags {
+  position: absolute;
+  top: var(--space-xs);
+  left: var(--space-xs);
+  display: flex;
+  gap: var(--space-2xs);
+  z-index: 1;
+}
+
+/* Wishlist heart button sitting on top of the product photo */
+.product-card__wishlist {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(251, 248, 242, 0.9);
+  color: var(--color-ink);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.product-card__wishlist:hover {
+  color: var(--color-brick);
+  transform: scale(1.08);
+}
+
+/* Turns solid/filled once JS toggles this class on click */
+.product-card__wishlist.is-active svg {
+  fill: var(--color-brick);
+  stroke: var(--color-brick);
+}
+
+.product-card__body {
+  padding: var(--space-sm);
+  position: relative;
+}
+
+/* The punched hole + dashed "stitch" line, drawn with plain CSS (no
+   image needed) so it costs nothing to reuse on every card. */
+.product-card__body::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: var(--space-sm);
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-bg);
+  border: 1px dashed var(--color-line-strong);
+  border-radius: 50%;
+}
+
+.product-card__brand {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.product-card__name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-block: 0.25em 0.5em;
+}
+
+.product-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-card__price {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+
+.product-card__price del {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  margin-right: 0.4em;
+}
+
+.product-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.product-card__rating svg {
+  color: var(--color-mustard);
+}
+
+.product-card__add {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. PAGE HEADER / BREADCRUMB (products, product-details, cart, ...)     */
+/* ---------------------------------------------------------------------- */
+
+.page-header {
+  padding-block: var(--space-lg) var(--space-md);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-ink);
+}
+
+.page-header h1 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+}
+
+/* ---------------------------------------------------------------------- */
+/* 3. HORIZONTAL SCROLLER (Home's "New Arrivals", also used for "You may  */
+/*    also like" on Product Details)                                     */
+/* ---------------------------------------------------------------------- */
+
+.scroller {
+  position: relative;
+}
+
+.scroller__track {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-xs); /* room for the scrollbar so it doesn't clip cards */
+  scrollbar-width: thin;
+}
+
+.scroller__track .product-card {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+}
+
+.scroller__nav {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.scroller__btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--color-line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.scroller__btn:hover {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+}

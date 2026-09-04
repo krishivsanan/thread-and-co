@@ -1,0 +1,12 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+
+# In case the team adds Node tooling later (e.g. Vite, npm packages)
+node_modules/
+dist/
+.env
