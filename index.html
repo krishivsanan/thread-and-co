@@ -31,6 +31,7 @@
     <!-- ---------- STYLESHEETS ----------
          Load order matters: tokens -> shared base -> shared components -> page-specific -->
     <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/loading.css" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/navbar.css" />
     <link rel="stylesheet" href="css/footer.css" />
@@ -39,6 +40,33 @@
   </head>
 
   <body>
+    <!-- Homepage Loading Screen -->
+    <div
+      id="site-loader"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading Thread & Co."
+    >
+      <div class="site-loader__content">
+
+        <p class="site-loader__brand">
+          Thread<span>&</span>Co.
+        </p>
+
+        <p class="site-loader__label">
+          Preparing your collection
+        </p>
+
+        <div
+          class="site-loader__bar"
+          aria-hidden="true"
+        ></div>
+
+      </div>
+    </div>
+
+    <script src="js/loading.js"></script>
+    
     <!-- ======================================================================
          NAVBAR  (shared across every page - copy this whole <header> block)
          ====================================================================== -->
