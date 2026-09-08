@@ -21,7 +21,9 @@ const COUPON_CODES = {
    STATE
    -------------------------------------------------------------------------- */
 
-let appliedCoupon = null;
+let appliedCoupon = JSON.parse(
+  localStorage.getItem("threadco_coupon")
+) || null;
 let selectedShipping = "standard";
 
 
@@ -1007,6 +1009,10 @@ localStorage.setItem(
   /* Clear cart */
 
   clearCart();
+
+  /* Clear applied coupon*/ 
+
+  localStorage.removeItem("threadco_coupon");
 
 
   /* Show success modal */

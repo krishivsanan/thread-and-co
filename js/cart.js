@@ -35,7 +35,10 @@ const COUPON_CODES = {
    which coupon (if any) is currently applied, since a coupon is a
    property of this shopping session, not of the cart's contents.
    ------------------------------------------------------------------------ */
-let appliedCoupon = null; // e.g. { code: "WELCOME10", percent: 0.1 }
+let appliedCoupon = JSON.parse(
+  localStorage.getItem("threadco_coupon")
+) || null;
+
 
 document.addEventListener("DOMContentLoaded", () => {
   render();
@@ -198,14 +201,27 @@ function attachEvents() {
       if (!code) return;
 
       if (COUPON_CODES[code]) {
-        appliedCoupon = { code, percent: COUPON_CODES[code] };
-        msgEl.textContent = `"${code}" applied - ${Math.round(COUPON_CODES[code] * 100)}% off.`;
-        msgEl.className = "coupon-msg coupon-msg--success";
-      } else {
-        appliedCoupon = null;
-        msgEl.textContent = "That code isn't valid.";
-        msgEl.className = "coupon-msg coupon-msg--error";
-      }
+        appliedCoupon = {
+        code,
+        percent: COUPON_CODES[code]
+      };
+
+      localStorage.setItem(
+        "threadco_coupon",
+        JSON.stringify(appliedCoupon)
+      );
+
+      msgEl.textContent = `"${code}" applied - ${Math.round(COUPON_CODES[code] * 100)}% off.`;
+      msgEl.className = "coupon-msg coupon-msg--success";
+
+    } else {
+      appliedCoupon = null;
+
+      localStorage.removeItem("threadco_coupon");
+
+      msgEl.textContent = "That code isn't valid.";
+      msgEl.className = "coupon-msg coupon-msg--error";
+    }
 
       renderSummary(getCartWithProductDetails());
     });
