@@ -5,8 +5,11 @@
    the product data, listens for filter/sort/search changes, and
    re-renders the product grid to match.
 
-   Loaded after js/data/products.js, so the PRODUCTS array and
-   COLOR_SWATCHES object are already available as global constants here.
+   Loaded after js/data/products.js and js/api-client.js. Waits on
+   window.PRODUCTS_READY (see api-client.js) before its own init runs,
+   so PRODUCTS is live data from the API whenever that's reachable, and
+   the bundled fallback otherwise — either way it's ready by the time
+   this file touches it.
 
    HOW THIS FILE IS ORGANISED (read top to bottom):
      1. STATE          - one object holding every active filter/sort/search
@@ -57,7 +60,8 @@ const PRICE_RANGES = [
 /* ------------------------------------------------------------------------
    2. INIT
    ------------------------------------------------------------------------ */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.PRODUCTS_READY; // live data if the API answered in time, the bundled fallback otherwise
   readFiltersFromURL();   // e.g. products.html?category=men from the navbar
   buildFilterSidebar();   // generate checkboxes/chips/swatches from PRODUCTS
   attachStaticListeners(); // sort dropdown, search box, clear button, mobile drawer

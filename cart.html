@@ -127,7 +127,8 @@
          main.js               = shared behavior (mobile menu, newsletter)
          store/cart-store.js    = cart + wishlist state (localStorage-backed)
          shared/navbar-badges.js = keeps the navbar cart count in sync
-         data/products.js        = the product "database" array (for item photos/prices)
+         data/products.js        = fallback product data (used only if the API is down)
+         api-client.js           = fetches live products from server/'s API
          cart.js                  = this page's own render/quantity/coupon logic -->
 
     <script src="js/shared/footer.js"></script>     
@@ -135,6 +136,7 @@
     <script src="js/store/cart-store.js"></script>
     <script src="js/shared/navbar-badges.js"></script>
     <script src="js/data/products.js"></script>
+    <script src="js/api-client.js"></script>
     <script src="js/cart.js"></script>
   </body>
 </html>

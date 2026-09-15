@@ -18,10 +18,15 @@
 
 /* ------------------------------------------------------------------------
    1. LOAD PRODUCT
+   `product` is resolved inside the DOMContentLoaded handler below (it
+   has to wait on window.PRODUCTS_READY — see js/api-client.js), but is
+   declared up here at module scope so every render function further
+   down this file can still just reference `product` directly, exactly
+   as before.
    ------------------------------------------------------------------------ */
 const urlParams = new URLSearchParams(window.location.search);
 const productId = Number(urlParams.get("id"));
-const product = PRODUCTS.find((p) => p.id === productId);
+let product;
 
 /* ------------------------------------------------------------------------
    2. STATE
@@ -36,7 +41,10 @@ const pdState = {
   activeTab: "description",
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await window.PRODUCTS_READY; // live data if the API answered in time, the bundled fallback otherwise
+  product = PRODUCTS.find((p) => p.id === productId);
+
   if (!product) {
     renderNotFound();
     return; // stop here - nothing else on the page has data to show

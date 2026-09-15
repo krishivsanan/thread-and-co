@@ -1,22 +1,20 @@
 /* ==========================================================================
    PRODUCTS.JS (data)
    ------------------------------------------------------------------------
-   This is our stand-in "database" - one JavaScript array of product
-   objects. Module 2 (Products page) reads from it to render the
-   catalogue, filters and sort. Module 3 (Product Details) reads from
-   this SAME array to show one product's full page - notice the `stock`
-   field below, which only Module 3 needed, so it was added here rather
-   than duplicating product info in a second file.
+   This used to be the whole "database." As of Part 2 of the backend
+   build, it's now the FALLBACK dataset only — js/api-client.js fetches
+   the live product list from server/'s Products API
+   (GET /api/products) and that's what pages actually render.
 
-   FUTURE INTEGRATION NOTE for Module 6 (Authentication & Backend):
-   Once a real backend exists, this file goes away and products.js/
-   product-details.js instead fetch the same shape of data from an API,
-   e.g. `fetch("/api/products").then(res => res.json())`. Keeping every
-   product object in this exact shape now means that swap won't require
-   rewriting the filtering/rendering logic later.
+   This array is still here for two reasons:
+     1. It seeds the database (server/scripts/extract-products.js reads
+        this exact file).
+     2. If the API is unreachable (backend not running, or this is a
+        static deploy with no backend yet — e.g. Vercel today), the
+        site falls back to this bundled data instead of breaking.
 
-   Loaded as a plain <script> (not a JS module), so it just declares a
-   global constant, PRODUCTS, that later scripts can read directly.
+   Loaded as a plain <script> (not a JS module), so it declares a
+   global constant, PRODUCTS_FALLBACK, that js/api-client.js reads.
 
    ABOUT `photoUrl`:
    Most products don't have this field yet, so they fall back to the
@@ -29,9 +27,13 @@
    (must be a real URL you have the rights to use), or delete the
    `photoUrl` line entirely and drop a file at
    assets/images/products/<id>.jpg instead — either works.
+
+   To change a product going forward, prefer editing it in the database
+   (or this file + re-running `npm run extract && npm run db:seed` in
+   server/) rather than editing both places separately.
    ========================================================================== */
 
-const PRODUCTS = [
+const PRODUCTS_FALLBACK = [
   // ---------------- MEN ----------------
   {
     id: 201,
@@ -394,3 +396,7 @@ const COLOR_SWATCHES = {
   olive: "#5f6b4a",
   grey: "#8c8477",
 };
+
+// Available synchronously, same as before — js/api-client.js overwrites
+// this in place once (and if) the live API data arrives.
+window.PRODUCTS = PRODUCTS_FALLBACK;
