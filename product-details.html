@@ -133,6 +133,11 @@
           <div class="scroller__track" id="pd-related-track"></div>
         </div>
       </section>
+
+      <!-- React demo component -->
+      <section class="container" style="margin: 40px 0;">
+        <div id="react-feature"></div>
+      </section>
     </main>
 
     <!-- ======================================================================
@@ -156,5 +161,26 @@
     <script src="js/data/products.js"></script>
     <script src="js/shared/product-card.js"></script>
     <script src="js/product-details.js"></script>
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <script>
+      function ReactFeature() {
+        const [saved, setSaved] = React.useState(false);
+    
+        return React.createElement(
+          "button",
+          {
+            onClick: () => setSaved(!saved)
+          },
+          saved ? "♥ Saved" : "♡ Save for later"
+        );
+      }
+    
+      ReactDOM.createRoot(
+        document.getElementById("react-feature")
+      ).render(React.createElement(ReactFeature));
+    </script>
   </body>
 </html>
