@@ -1,8 +1,9 @@
-# Thread & Co. — Backend (Part 1: Products API)
+# Thread & Co. — Backend
 
-A small Express + Postgres API. This part only covers products —
-read-only, nothing else — so it's a solid, testable foundation for the
-auth, cart, and orders APIs that come in later parts.
+A small Express + Postgres API for Thread & Co. Currently covers:
+read-only product listing/search, and real authentication (signup,
+login, bcrypt-hashed passwords, JWT sessions). Cart and orders are
+next.
 
 ## Setup
 
@@ -20,6 +21,9 @@ auth, cart, and orders APIs that come in later parts.
    ```bash
    cp .env.example .env
    # edit .env — paste your DATABASE_URL (and set DATABASE_SSL=true if using Neon/Supabase)
+   # generate a JWT_SECRET:
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   # paste that into .env as JWT_SECRET
    ```
 
 4. **Create the schema:**
@@ -43,11 +47,21 @@ auth, cart, and orders APIs that come in later parts.
 
 ## Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| GET | `/api/health` | Confirms the server is up and the DB is reachable |
-| GET | `/api/products` | List products. Supports `?category=`, `?minPrice=`, `?maxPrice=`, `?size=`, `?q=`, `?sort=`, `?page=`, `?limit=` |
-| GET | `/api/products/:id` | A single product by id |
+| Method | Path | Auth? | Description |
+|---|---|---|---|
+| GET | `/api/health` | – | Confirms the server is up and the DB is reachable |
+| GET | `/api/products` | – | List products. Supports `?category=`, `?minPrice=`, `?maxPrice=`, `?size=`, `?q=`, `?sort=`, `?page=`, `?limit=` |
+| GET | `/api/products/:id` | – | A single product by id |
+| POST | `/api/auth/signup` | – | `{ name, email, password, phone? }` → `{ token, user }` |
+| POST | `/api/auth/login` | – | `{ email, password }` → `{ token, user }` |
+| GET | `/api/auth/me` | Bearer token | Returns the logged-in user, for "am I still logged in?" checks on page load |
+
+Auth notes:
+- Passwords are hashed with bcrypt (`bcryptjs`, 10 salt rounds) — never stored or compared in plaintext.
+- Login and signup are rate-limited together: 10 attempts per IP per 15 minutes, to slow down password guessing.
+- Email matching is case-insensitive (`Foo@x.com` and `foo@x.com` are the same account), enforced with a unique index rather than a Postgres extension, so it works on any host.
+- Tokens are JWTs, valid 7 days, signed with `JWT_SECRET` from `.env`. Send them as `Authorization: Bearer <token>` on any protected route.
+- Login and signup return an identical error message for "no such user" and "wrong password," so a bad actor can't use the error to find out which emails are registered.
 
 `GET /api/products` response shape:
 ```json
@@ -61,4 +75,4 @@ Product objects use the same field names (`originalPrice`, `photoUrl`, `isNew`, 
 
 ## What's deliberately not here yet
 
-No auth, no cart, no orders, no write endpoints — those are separate parts, built and tested the same way once this one is confirmed solid. The frontend also isn't touched yet; it still reads its own static `js/data/products.js` until Part 2 switches it over to `fetch("/api/products")`.
+No cart or orders APIs, no write endpoints for products, and the frontend's `login.html`/`account.html` don't call this yet — they still use the old `localStorage`-based fake auth until the next part wires them up to these real endpoints.
