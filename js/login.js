@@ -3,6 +3,7 @@
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = window.THREADCO_API_BASE || "http://localhost:4000/api";
 
   const currentUser = JSON.parse(
     localStorage.getItem("threadco_current_user")
@@ -124,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  /* ----------------------------------------------------------------------
+    /* ----------------------------------------------------------------------
      SIGN UP
      ---------------------------------------------------------------------- */
 
@@ -184,96 +185,91 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* Check existing user */
+    /* Create account via the API */
 
-    const users =
-      JSON.parse(
-        localStorage.getItem(
-          "threadco_users"
-        )
-      ) || [];
+    const submitButton =
+      signupForm.querySelector("button[type='submit']");
 
-
-    const existingUser =
-      users.find(
-        (user) =>
-          user.email === email
-      );
-
-
-    if (existingUser) {
-
-      showMessage(
-        "An account with this email already exists.",
-        "error"
-      );
-
-      return;
+    if (submitButton) {
+      submitButton.disabled = true;
     }
 
 
-    /* Create user */
+    fetch(`${API_BASE}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password
+      }),
+    })
+      .then(async (res) => {
 
-    const newUser = {
+        const data = await res.json();
 
-      id: Date.now(),
+        if (!res.ok) {
+          throw new Error(
+            data.error || "Something went wrong."
+          );
+        }
 
-      name,
-
-      email,
-
-      password
-
-    };
-
-
-    users.push(newUser);
-
-
-    localStorage.setItem(
-      "threadco_users",
-      JSON.stringify(users)
-    );
-
-
-    /* Login user */
-
-    localStorage.setItem(
-      "threadco_current_user",
-      JSON.stringify({
-
-        id: newUser.id,
-
-        name: newUser.name,
-
-        email: newUser.email
+        return data;
 
       })
-    );
+      .then(({ token, user }) => {
+
+        localStorage.setItem(
+          "threadco_token",
+          token
+        );
+
+        localStorage.setItem(
+          "threadco_current_user",
+          JSON.stringify(user)
+        );
 
 
-    showMessage(
-      `Welcome to Thread & Co., ${name}!`,
-      "success"
-    );
+        showMessage(
+          `Welcome to Thread & Co., ${user.name}!`,
+          "success"
+        );
 
 
-    signupForm.reset();
+        signupForm.reset();
 
 
-    /* Redirect after success */
+        setTimeout(() => {
 
-    setTimeout(() => {
+          window.location.href =
+            "account.html";
 
-      window.location.href =
-        "account.html";
+        }, 1200);
 
-    }, 1200);
+      })
+      .catch((err) => {
+
+        showMessage(
+          err.message,
+          "error"
+        );
+
+      })
+      .finally(() => {
+
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+
+      });
 
   });
+  
 
 
-  /* ----------------------------------------------------------------------
+    /* ----------------------------------------------------------------------
      LOGIN
      ---------------------------------------------------------------------- */
 
@@ -296,63 +292,82 @@ document.addEventListener("DOMContentLoaded", () => {
         .value;
 
 
-    const users =
-      JSON.parse(
-        localStorage.getItem(
-          "threadco_users"
-        )
-      ) || [];
+    /* Log in via the API */
 
+    const submitButton =
+      loginForm.querySelector("button[type='submit']");
 
-    const user =
-      users.find(
-        (user) =>
-          user.email === email &&
-          user.password === password
-      );
-
-
-    if (!user) {
-
-      showMessage(
-        "Incorrect email or password.",
-        "error"
-      );
-
-      return;
+    if (submitButton) {
+      submitButton.disabled = true;
     }
 
 
-    /* Save logged-in user */
+    fetch(`${API_BASE}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      }),
+    })
+      .then(async (res) => {
 
-    localStorage.setItem(
-      "threadco_current_user",
-      JSON.stringify({
+        const data = await res.json();
 
-        id: user.id,
+        if (!res.ok) {
+          throw new Error(
+            data.error ||
+            "Incorrect email or password."
+          );
+        }
 
-        name: user.name,
-
-        email: user.email
+        return data;
 
       })
-    );
+      .then(({ token, user }) => {
+
+        localStorage.setItem(
+          "threadco_token",
+          token
+        );
+
+        localStorage.setItem(
+          "threadco_current_user",
+          JSON.stringify(user)
+        );
 
 
-    showMessage(
-      `Welcome back, ${user.name}!`,
-      "success"
-    );
+        showMessage(
+          `Welcome back, ${user.name}!`,
+          "success"
+        );
 
 
-    /* Redirect */
+        setTimeout(() => {
 
-    setTimeout(() => {
+          window.location.href =
+            "account.html";
 
-      window.location.href =
-        "account.html";
+        }, 1000);
 
-    }, 1000);
+      })
+      .catch((err) => {
+
+        showMessage(
+          err.message,
+          "error"
+        );
+
+      })
+      .finally(() => {
+
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+
+      });
 
   });
 

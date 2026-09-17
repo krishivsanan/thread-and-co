@@ -142,10 +142,16 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutButton.addEventListener(
       "click",
       () => {
-
+        
         localStorage.removeItem(
           "threadco_current_user"
         );
+
+        localStorage.removeItem(
+          "threadco_token"
+        );
+
+
 
 
         window.location.href =
