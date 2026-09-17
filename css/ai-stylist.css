@@ -1,0 +1,489 @@
+/* ==========================================================================
+   AI-STYLIST.CSS
+   --------------------------------------------------------------------------
+   Floating AI Stylist button + right-side stylist panel.
+
+   Stage 1:
+   - Frontend UI only
+   - No API / LLM connection yet
+   - Demo conversation handled by ai-stylist.js
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. FLOATING BUTTON
+   ========================================================================== */
+
+.ai-stylist-trigger {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 900;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 48px;
+  padding: 0.8rem 1.15rem;
+
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-base),
+    color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.ai-stylist-trigger:hover {
+  background-color: var(--color-brick);
+  border-color: var(--color-brick);
+
+  transform: translateY(-3px);
+
+  box-shadow: var(--shadow-card-hover);
+}
+
+.ai-stylist-trigger:active {
+  transform: translateY(-1px);
+}
+
+.ai-stylist-trigger__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 20px;
+
+  font-size: 1rem;
+  line-height: 1;
+}
+
+
+/* ==========================================================================
+   2. OVERLAY
+   ========================================================================== */
+
+.ai-stylist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+
+  background-color: rgba(28, 27, 26, 0.42);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity var(--transition-base),
+    visibility var(--transition-base);
+}
+
+body.ai-stylist-open .ai-stylist-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ==========================================================================
+   3. STYLIST PANEL
+   ========================================================================== */
+
+.ai-stylist-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(430px, 100vw);
+  height: 100dvh;
+
+  background-color: var(--color-bg);
+
+  border-left: 1px solid var(--color-line);
+
+  box-shadow: -12px 0 32px rgba(28, 27, 26, 0.14);
+
+  transform: translateX(100%);
+  visibility: hidden;
+
+  transition:
+    transform var(--transition-base),
+    visibility var(--transition-base);
+}
+
+body.ai-stylist-open .ai-stylist-panel {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+
+/* ==========================================================================
+   4. PANEL HEADER
+   ========================================================================== */
+
+.ai-stylist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex-shrink: 0;
+
+  padding: 1.2rem 1.35rem;
+
+  background-color: var(--color-card);
+
+  border-bottom: 1px solid var(--color-line);
+}
+
+.ai-stylist-header__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.ai-stylist-header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+
+  border-radius: 50%;
+
+  font-size: 0.95rem;
+}
+
+.ai-stylist-header__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-stylist-header__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.ai-stylist-header__name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+.ai-stylist-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  color: var(--color-ink);
+
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+
+  font-size: 1.35rem;
+  line-height: 1;
+
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.ai-stylist-close:hover {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  border-color: var(--color-ink);
+}
+
+
+/* ==========================================================================
+   5. CHAT AREA
+   ========================================================================== */
+
+.ai-stylist-chat {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 1.5rem 1.25rem;
+
+  scroll-behavior: smooth;
+}
+
+
+/* ==========================================================================
+   6. MESSAGE BUBBLES
+   ========================================================================== */
+
+.ai-stylist-message {
+  display: flex;
+
+  margin-bottom: 1rem;
+}
+
+.ai-stylist-message--ai {
+  justify-content: flex-start;
+}
+
+.ai-stylist-message--user {
+  justify-content: flex-end;
+}
+
+.ai-stylist-message__bubble {
+  max-width: 85%;
+
+  padding: 0.85rem 1rem;
+
+  font-size: 0.9rem;
+  line-height: 1.55;
+
+  border-radius: var(--radius-md);
+}
+
+.ai-stylist-message--ai .ai-stylist-message__bubble {
+  background-color: var(--color-card);
+
+  border: 1px solid var(--color-line);
+
+  color: var(--color-ink);
+}
+
+.ai-stylist-message--user .ai-stylist-message__bubble {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+
+  border: 1px solid var(--color-ink);
+}
+
+
+/* ==========================================================================
+   7. STARTER PROMPTS
+   ========================================================================== */
+
+.ai-stylist-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+
+  margin-top: 1.1rem;
+}
+
+.ai-stylist-prompt {
+  padding: 0.65rem 0.8rem;
+
+  background-color: transparent;
+  color: var(--color-ink);
+
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.ai-stylist-prompt:hover {
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  border-color: var(--color-ink);
+}
+
+
+/* ==========================================================================
+   8. INPUT AREA
+   ========================================================================== */
+
+.ai-stylist-input-area {
+  flex-shrink: 0;
+
+  padding: 1rem 1.15rem;
+
+  background-color: var(--color-card);
+
+  border-top: 1px solid var(--color-line);
+}
+
+.ai-stylist-form {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ai-stylist-input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 44px;
+
+  padding: 0 0.9rem;
+
+  background-color: var(--color-bg);
+
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+
+  color: var(--color-ink);
+
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.ai-stylist-input::placeholder {
+  color: var(--color-muted);
+}
+
+.ai-stylist-input:focus {
+  border-color: var(--color-ink);
+  outline: none;
+
+  box-shadow: 0 0 0 2px rgba(28, 27, 26, 0.08);
+}
+
+.ai-stylist-send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  background-color: var(--color-brick);
+  color: var(--color-bg);
+
+  border: 1px solid var(--color-brick);
+  border-radius: var(--radius-sm);
+
+  font-size: 1rem;
+
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.ai-stylist-send:hover {
+  background-color: var(--color-brick-dark);
+  border-color: var(--color-brick-dark);
+
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   9. SMALL STATUS / BRAND DETAIL
+   ========================================================================== */
+
+.ai-stylist-status {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  margin-top: 0.65rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.ai-stylist-status__dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background-color: var(--color-mustard);
+}
+
+
+/* ==========================================================================
+   10. MOBILE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+
+  .ai-stylist-trigger {
+    right: 16px;
+    bottom: 16px;
+
+    min-height: 44px;
+
+    padding: 0.7rem 0.9rem;
+
+    font-size: 0.68rem;
+  }
+
+  .ai-stylist-panel {
+    width: 100vw;
+
+    border-left: none;
+  }
+
+  .ai-stylist-header {
+    padding: 1rem;
+  }
+
+  .ai-stylist-chat {
+    padding: 1.15rem 1rem;
+  }
+
+  .ai-stylist-input-area {
+    padding: 0.8rem;
+  }
+}
+
+
+/* ==========================================================================
+   11. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .ai-stylist-panel,
+  .ai-stylist-overlay,
+  .ai-stylist-trigger,
+  .ai-stylist-prompt,
+  .ai-stylist-send {
+    transition: none;
+  }
+}
