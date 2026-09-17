@@ -29,6 +29,27 @@ function requireAuth(req, res, next) {
   }
 }
 
+/**
+ * Like requireAuth, but never rejects.
+ * If a valid Bearer token is present, attach req.user.
+ * Otherwise continue as a guest.
+ */
+function optionalAuth(req, res, next) {
+  const header = req.headers.authorization || "";
+  const [scheme, token] = header.split(" ");
+
+  if (scheme === "Bearer" && token) {
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = { id: payload.sub, email: payload.email };
+    } catch (err) {
+      // Invalid or expired token: treat the request as a guest.
+    }
+  }
+
+  next();
+}
+
 function signToken(user) {
   return jwt.sign(
     { sub: user.id, email: user.email },
@@ -37,4 +58,4 @@ function signToken(user) {
   );
 }
 
-module.exports = { requireAuth, signToken };
+module.exports = { requireAuth, optionalAuth, signToken };

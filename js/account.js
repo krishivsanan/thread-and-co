@@ -2,22 +2,41 @@
    ACCOUNT PAGE
    ========================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+const API_BASE = "http://localhost:4000";
+
+
+document.addEventListener("DOMContentLoaded", async () => {
 
   /* ----------------------------------------------------------------------
      GET LOGGED-IN USER
      ---------------------------------------------------------------------- */
 
-  const currentUser = JSON.parse(
-    localStorage.getItem("threadco_current_user")
-  );
+  let currentUser = null;
+
+  try {
+
+    currentUser = JSON.parse(
+      localStorage.getItem(
+        "threadco_current_user"
+      )
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Could not read current user:",
+      error
+    );
+
+  }
 
 
   /* If user is not logged in, send them to login page */
 
   if (!currentUser) {
 
-    window.location.href = "login.html";
+    window.location.href =
+      "login.html";
 
     return;
   }
@@ -28,72 +47,173 @@ document.addEventListener("DOMContentLoaded", () => {
      ---------------------------------------------------------------------- */
 
   const accountUserName =
-    document.getElementById("account-user-name");
+    document.getElementById(
+      "account-user-name"
+    );
 
   const profileName =
-    document.getElementById("profile-name");
+    document.getElementById(
+      "profile-name"
+    );
 
   const profileEmail =
-    document.getElementById("profile-email");
+    document.getElementById(
+      "profile-email"
+    );
 
   const profileAvatar =
-    document.getElementById("profile-avatar");
+    document.getElementById(
+      "profile-avatar"
+    );
 
 
   if (accountUserName) {
 
     accountUserName.textContent =
-      currentUser.name;
+      currentUser.name || "User";
+
   }
 
 
   if (profileName) {
 
     profileName.textContent =
-      currentUser.name;
+      currentUser.name || "User";
+
   }
 
 
   if (profileEmail) {
 
     profileEmail.textContent =
-      currentUser.email;
+      currentUser.email || "";
+
   }
 
 
   if (profileAvatar) {
 
     profileAvatar.textContent =
-      currentUser.name
+      (currentUser.name || "U")
         .charAt(0)
         .toUpperCase();
+
   }
 
 
   /* ----------------------------------------------------------------------
-     LOAD ALL ORDERS
+     LOAD ORDERS FROM BACKEND
      ---------------------------------------------------------------------- */
 
-  const allOrders = JSON.parse(
-    localStorage.getItem("threadco_orders")
-  ) || [];
+  let userOrders = [];
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/api/orders`,
+        {
+          method: "GET",
+
+          headers: {
+
+            ...(localStorage.getItem("threadco_token")
+              ? {
+                  Authorization:
+                    `Bearer ${localStorage.getItem("threadco_token")}`
+                  }
+              : {})
+
+          }
+
+        }
+      );
 
 
-  /* Only show orders belonging to current user */
+    const result =
+      await response.json();
 
-  const userOrders =
-    allOrders.filter(
-      (order) =>
-        order.userId === currentUser.id
+
+    if (!response.ok) {
+
+      console.error(
+        "Failed to load orders:",
+        result
+      );
+
+      throw new Error(
+        result.error ||
+        "Failed to load orders."
+      );
+
+    }
+
+
+    /*
+     * Backend returns the user's orders.
+     */
+
+    userOrders =
+      Array.isArray(result.orders)
+        ? result.orders
+        : [];
+
+  } catch (error) {
+
+    console.error(
+      "Could not load orders:",
+      error
     );
 
 
-  /* Newest order first */
+    const ordersList =
+      document.getElementById(
+        "orders-list"
+      );
+
+
+    if (ordersList) {
+
+      ordersList.innerHTML = `
+
+        <div class="empty-orders">
+
+          <div class="empty-orders__icon">
+            ⚠️
+          </div>
+
+          <h3>
+            Couldn't load your orders
+          </h3>
+
+          <p>
+            Please make sure the Thread & Co.
+            server is running and try again.
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  /* ----------------------------------------------------------------------
+     NEWEST ORDER FIRST
+     ---------------------------------------------------------------------- */
 
   userOrders.sort(
     (a, b) =>
-      new Date(b.createdAt) -
-      new Date(a.createdAt)
+      new Date(
+        b.created_at ||
+        b.createdAt
+      ) -
+      new Date(
+        a.created_at ||
+        a.createdAt
+      )
   );
 
 
@@ -102,7 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
      ---------------------------------------------------------------------- */
 
   const ordersCount =
-    document.getElementById("orders-count");
+    document.getElementById(
+      "orders-count"
+    );
 
 
   if (ordersCount) {
@@ -117,6 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "order"
           : "orders"
       }`;
+
   }
 
 
@@ -134,7 +257,9 @@ document.addEventListener("DOMContentLoaded", () => {
      ---------------------------------------------------------------------- */
 
   const logoutButton =
-    document.getElementById("logout-btn");
+    document.getElementById(
+      "logout-btn"
+    );
 
 
   if (logoutButton) {
@@ -142,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutButton.addEventListener(
       "click",
       () => {
-        
+
         localStorage.removeItem(
           "threadco_current_user"
         );
@@ -152,8 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-
-
         window.location.href =
           "login.html";
 
@@ -161,7 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
   }
-
 
 });
 
@@ -173,7 +295,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderOrders(orders) {
 
   const ordersList =
-    document.getElementById("orders-list");
+    document.getElementById(
+      "orders-list"
+    );
 
 
   if (!ordersList) return;
@@ -239,35 +363,89 @@ function renderOrders(orders) {
 
 function createOrderCard(order) {
 
+  /* ----------------------------------------------------------------------
+     BASIC ORDER DATA
+     ---------------------------------------------------------------------- */
+
+  const orderNumber =
+    order.order_number ||
+    order.orderNumber ||
+    "Order";
+
+
+  const createdAt =
+    order.created_at ||
+    order.createdAt;
+
+
   const date =
-    formatOrderDate(order.createdAt);
+    formatOrderDate(createdAt);
+
+
+  const status =
+    order.status ||
+    "Order placed";
 
 
   /* ----------------------------------------------------------------------
      PRODUCTS
      ---------------------------------------------------------------------- */
 
+  const items =
+    Array.isArray(order.items)
+      ? order.items
+      : [];
+
+
   const productsHTML =
-    order.items
+    items
       .map((item) => {
 
-        const product =
-          item.product;
+        /*
+         * Backend order items use:
+         * product_name
+         * product_id
+         * unit_price
+         *
+         * Old frontend orders used:
+         * item.product
+         */
 
-        if (!product) return "";
+        const product =
+          item.product || null;
+
+
+        const productName =
+          item.product_name ||
+          product?.name ||
+          "Product";
+
+
+        const productId =
+          item.product_id ||
+          product?.id;
 
 
         const image =
-          product.photoUrl ||
-          `assets/images/products/${product.id}.jpg`;
+          item.photo_url ||
+          product?.photoUrl ||
+          "assets/images/products/1.jpg";
 
 
         const quantity =
-          item.quantity || 1;
+          Number(item.quantity) || 1;
+
+
+        const unitPrice =
+          Number(
+            item.unit_price ??
+            product?.price ??
+            0
+          );
 
 
         const lineTotal =
-          product.price * quantity;
+          unitPrice * quantity;
 
 
         const variantParts = [
@@ -281,13 +459,13 @@ function createOrderCard(order) {
 
             <img
               src="${image}"
-              alt="${product.name}"
+              alt="${productName}"
             >
 
             <div>
 
               <p class="order-product__name">
-                ${product.name}
+                ${productName}
               </p>
 
               <p class="order-product__meta">
@@ -320,19 +498,43 @@ function createOrderCard(order) {
      ---------------------------------------------------------------------- */
 
   const subtotal =
-    order.totals?.subtotal || 0;
+    Number(
+      order.subtotal ??
+      order.totals?.subtotal ??
+      0
+    );
+
 
   const shippingCost =
-    order.totals?.shipping || 0;
+    Number(
+      order.shipping_cost ??
+      order.totals?.shipping ??
+      0
+    );
+
 
   const tax =
-    order.totals?.tax || 0;
+    Number(
+      order.tax ??
+      order.totals?.tax ??
+      0
+    );
+
 
   const discount =
-    order.totals?.discount || 0;
+    Number(
+      order.discount ??
+      order.totals?.discount ??
+      0
+    );
+
 
   const total =
-    order.totals?.total || 0;
+    Number(
+      order.total ??
+      order.totals?.total ??
+      0
+    );
 
 
   /* ----------------------------------------------------------------------
@@ -340,14 +542,19 @@ function createOrderCard(order) {
      ---------------------------------------------------------------------- */
 
   const customerName =
+    order.customer_name ||
     order.customer?.name ||
     "Not available";
 
+
   const customerEmail =
+    order.customer_email ||
     order.customer?.email ||
     "Not available";
 
+
   const customerPhone =
+    order.customer_phone ||
     order.customer?.phone ||
     "Not available";
 
@@ -356,26 +563,35 @@ function createOrderCard(order) {
      DELIVERY
      ---------------------------------------------------------------------- */
 
-  const delivery =
-    order.delivery || {};
-
-
   const shippingAddress = [
-    delivery.address,
-    delivery.apartment,
-    delivery.city,
-    delivery.state,
-    delivery.postalCode,
-    delivery.country
+
+    order.address ||
+      order.delivery?.address,
+
+    order.apartment ||
+      order.delivery?.apartment,
+
+    order.city ||
+      order.delivery?.city,
+
+    order.state ||
+      order.delivery?.state,
+
+    order.postal_code ||
+      order.delivery?.postalCode,
+
+    order.country ||
+      order.delivery?.country
+
   ]
     .filter(Boolean)
     .join(", ") || "Not available";
 
 
   const shippingMethod =
-    typeof order.shipping === "object"
-      ? order.shipping.method
-      : order.shipping || "Standard delivery";
+    order.shipping_method ||
+    order.shipping?.method ||
+    "Standard delivery";
 
 
   /* ----------------------------------------------------------------------
@@ -383,17 +599,26 @@ function createOrderCard(order) {
      ---------------------------------------------------------------------- */
 
   const paymentMethod =
+    order.payment_method ||
     order.payment?.method ||
     "Not available";
 
+
   const paymentStatus =
+    order.payment_status ||
     order.payment?.status ||
     "Not available";
 
 
   /* ----------------------------------------------------------------------
-     DISCOUNT
+     COUPON
      ---------------------------------------------------------------------- */
+
+  const couponCode =
+    order.coupon_code ||
+    order.coupon?.code ||
+    "";
+
 
   const discountHTML =
     discount > 0
@@ -403,8 +628,8 @@ function createOrderCard(order) {
           <span>
             Discount
             ${
-              order.coupon?.code
-                ? `(${order.coupon.code})`
+              couponCode
+                ? `(${couponCode})`
                 : ""
             }
           </span>
@@ -434,7 +659,7 @@ function createOrderCard(order) {
         <div>
 
           <strong class="order-number">
-            ${order.orderNumber}
+            ${orderNumber}
           </strong>
 
           <p class="order-date">
@@ -444,7 +669,7 @@ function createOrderCard(order) {
         </div>
 
         <span class="order-status">
-          ${order.status || "Order placed"}
+          ${status}
         </span>
 
       </div>
@@ -463,10 +688,10 @@ function createOrderCard(order) {
 
         <span>
 
-          ${order.items.length}
+          ${items.length}
 
           ${
-            order.items.length === 1
+            items.length === 1
               ? "item"
               : "items"
           }
@@ -609,7 +834,7 @@ function createOrderCard(order) {
               </span>
 
               <strong>
-                ${order.status || "Order placed"}
+                ${status}
               </strong>
 
             </div>
@@ -757,6 +982,13 @@ function formatOrderDate(dateString) {
     new Date(dateString);
 
 
+  if (Number.isNaN(date.getTime())) {
+
+    return "Unknown date";
+
+  }
+
+
   return date.toLocaleDateString(
     "en-US",
     {
@@ -792,13 +1024,17 @@ function attachOrderDetailsEvents() {
       () => {
 
         const card =
-          button.closest(".order-card");
+          button.closest(
+            ".order-card"
+          );
 
         if (!card) return;
 
 
         const details =
-          card.querySelector(".order-details");
+          card.querySelector(
+            ".order-details"
+          );
 
         if (!details) return;
 
@@ -819,6 +1055,7 @@ function attachOrderDetailsEvents() {
           button.querySelector(
             "span:first-child"
           );
+
 
         const icon =
           button.querySelector(

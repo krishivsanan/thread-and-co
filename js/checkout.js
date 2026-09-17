@@ -3,6 +3,13 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
+   API
+   -------------------------------------------------------------------------- */
+
+const API_BASE = "http://localhost:4000";
+
+
+/* --------------------------------------------------------------------------
    PRICING
    -------------------------------------------------------------------------- */
 
@@ -24,6 +31,7 @@ const COUPON_CODES = {
 let appliedCoupon = JSON.parse(
   localStorage.getItem("threadco_coupon")
 ) || null;
+
 let selectedShipping = "standard";
 
 
@@ -65,7 +73,8 @@ function renderCheckout() {
 
 function renderCheckoutItems(items) {
 
-  const container = document.getElementById("checkout-items");
+  const container =
+    document.getElementById("checkout-items");
 
   if (!container) return;
 
@@ -193,7 +202,8 @@ function calculateTotals(items) {
 
 function renderTotals(items) {
 
-  const totals = calculateTotals(items);
+  const totals =
+    calculateTotals(items);
 
   const totalsContainer =
     document.getElementById("checkout-totals");
@@ -239,7 +249,8 @@ function renderTotals(items) {
               Add $${(
                 FREE_SHIPPING_THRESHOLD -
                 totals.subtotal
-              ).toFixed(2)} for free shipping
+              ).toFixed(2)}
+              for free shipping
             </span>
 
           </div>
@@ -290,10 +301,12 @@ function renderTotals(items) {
   `;
 
 
-  /* Update place order button */
+  /* Place order button total */
 
   const placeOrderTotal =
-    document.getElementById("place-order-total");
+    document.getElementById(
+      "place-order-total"
+    );
 
   if (placeOrderTotal) {
 
@@ -305,7 +318,9 @@ function renderTotals(items) {
   /* Mobile summary total */
 
   const mobileTotal =
-    document.getElementById("mobile-summary-total");
+    document.getElementById(
+      "mobile-summary-total"
+    );
 
   if (mobileTotal) {
 
@@ -314,9 +329,10 @@ function renderTotals(items) {
   }
 
 
-  /* Render mobile summary */
-
-  renderMobileSummary(items, totals);
+  renderMobileSummary(
+    items,
+    totals
+  );
 }
 
 
@@ -326,11 +342,12 @@ function renderTotals(items) {
 
 function updateItemCount(items) {
 
-  const count = items.reduce(
-    (sum, item) =>
-      sum + item.quantity,
-    0
-  );
+  const count =
+    items.reduce(
+      (sum, item) =>
+        sum + item.quantity,
+      0
+    );
 
 
   const mobileCount =
@@ -341,7 +358,11 @@ function updateItemCount(items) {
   if (mobileCount) {
 
     mobileCount.textContent =
-      `(${count} ${count === 1 ? "item" : "items"})`;
+      `(${count} ${
+        count === 1
+          ? "item"
+          : "items"
+      })`;
   }
 }
 
@@ -350,7 +371,10 @@ function updateItemCount(items) {
    MOBILE SUMMARY
    -------------------------------------------------------------------------- */
 
-function renderMobileSummary(items, totals) {
+function renderMobileSummary(
+  items,
+  totals
+) {
 
   const container =
     document.getElementById(
@@ -360,50 +384,49 @@ function renderMobileSummary(items, totals) {
   if (!container) return;
 
 
-  const itemsHTML = items
-    .map((item) => {
+  const itemsHTML =
+    items
+      .map((item) => {
 
-      const product =
-        item.product;
+        const product =
+          item.product;
 
-      const photo =
-        product.photoUrl ||
-        `assets/images/products/${product.id}.jpg`;
+        const photo =
+          product.photoUrl ||
+          `assets/images/products/${product.id}.jpg`;
 
-      return `
-        <div class="checkout-item">
+        return `
+          <div class="checkout-item">
 
-          <img
-            class="checkout-item__image"
-            src="${photo}"
-            alt="${product.name}"
-          />
+            <img
+              class="checkout-item__image"
+              src="${photo}"
+              alt="${product.name}"
+            />
 
-          <div class="checkout-item__info">
+            <div class="checkout-item__info">
 
-            <p class="checkout-item__name">
-              ${product.name}
-            </p>
+              <p class="checkout-item__name">
+                ${product.name}
+              </p>
 
-            <p class="checkout-item__meta">
-              Qty ${item.quantity}
-            </p>
+              <p class="checkout-item__meta">
+                Qty ${item.quantity}
+              </p>
+
+            </div>
+
+            <span class="checkout-item__price">
+              $${(
+                product.price *
+                item.quantity
+              ).toFixed(2)}
+            </span>
 
           </div>
-
-          <span class="checkout-item__price">
-
-            $${(
-              product.price *
-              item.quantity
-            ).toFixed(2)}
-
-          </span>
-
-        </div>
-      `;
-    })
-    .join("");
+        `;
+      })
+      .join("");
 
 
   container.innerHTML = `
@@ -433,13 +456,11 @@ function renderMobileSummary(items, totals) {
         <span>Shipping</span>
 
         <strong>
-
           ${
             totals.shipping === 0
               ? "Free"
               : `$${totals.shipping.toFixed(2)}`
           }
-
         </strong>
 
       </div>
@@ -459,9 +480,7 @@ function renderMobileSummary(items, totals) {
       ${
         appliedCoupon
           ? `
-            <div
-              class="total-row total-row--discount"
-            >
+            <div class="total-row total-row--discount">
 
               <span>
                 Discount
@@ -477,9 +496,7 @@ function renderMobileSummary(items, totals) {
       }
 
 
-      <div
-        class="total-row total-row--grand"
-      >
+      <div class="total-row total-row--grand">
 
         <span>Total</span>
 
@@ -590,7 +607,7 @@ function handleCoupon(event) {
 
     appliedCoupon = {
 
-      code: code,
+      code,
 
       percent:
         COUPON_CODES[code]
@@ -613,6 +630,12 @@ function handleCoupon(event) {
     message.textContent =
       "That discount code isn't valid.";
   }
+
+
+  localStorage.setItem(
+    "threadco_coupon",
+    JSON.stringify(appliedCoupon)
+  );
 
 
   renderCheckout();
@@ -676,21 +699,13 @@ function validateCheckoutForm() {
   const requiredFields = [
 
     "email",
-
     "first-name",
-
     "last-name",
-
     "address",
-
     "city",
-
     "state",
-
     "postal-code",
-
     "country",
-
     "phone"
 
   ];
@@ -743,7 +758,7 @@ function validateCheckoutForm() {
   }
 
 
-  /* Card validation only when card is selected */
+  /* Card validation */
 
   const payment =
     document.querySelector(
@@ -759,11 +774,8 @@ function validateCheckoutForm() {
     const cardFields = [
 
       "card-name",
-
       "card-number",
-
       "expiry",
-
       "cvv"
 
     ];
@@ -802,7 +814,7 @@ function validateCheckoutForm() {
    PLACE ORDER
    -------------------------------------------------------------------------- */
 
-function handlePlaceOrder(event) {
+async function handlePlaceOrder(event) {
 
   event.preventDefault();
 
@@ -819,6 +831,8 @@ function handlePlaceOrder(event) {
   }
 
 
+  /* Validate form */
+
   const isValid =
     validateCheckoutForm();
 
@@ -833,201 +847,318 @@ function handlePlaceOrder(event) {
   }
 
 
-  /* Generate order number */
+  /* Current logged-in user */
 
-  const orderNumber =
-    `TC-${Date.now()
-      .toString()
-      .slice(-8)}`;
+  let currentUser = null;
 
+  try {
 
-  const orderNumberElement =
-    document.getElementById(
-      "success-order-number"
+    currentUser =
+      JSON.parse(
+        localStorage.getItem(
+          "threadco_current_user"
+        )
+      );
+
+  } catch (error) {
+
+    console.warn(
+      "Could not read current user.",
+      error
     );
-
-
-  if (orderNumberElement) {
-
-    orderNumberElement.textContent =
-      orderNumber;
   }
 
 
-  /* Save basic demo order information */
+  /* Payment method */
 
-/* ----------------------------------------------------------------------
-   SAVE ORDER
-   ---------------------------------------------------------------------- */
-
-/* Get currently logged-in user */
-
-const currentUser = JSON.parse(
-  localStorage.getItem("threadco_current_user")
-);
+  const selectedPayment =
+    document.querySelector(
+      'input[name="payment"]:checked'
+    );
 
 
-/* Create order */
-
-const totals =
-  calculateTotals(items);
-
-
-const order = {
-
-  orderNumber,
-
-  userId:
-    currentUser
-      ? currentUser.id
-      : null,
+  const paymentMethod =
+    selectedPayment?.value === "cash"
+      ? "cash"
+      : "card";
 
 
-  /* Customer */
+  /* Customer information */
 
-  customer: {
-
-    name:
-      `${document.getElementById("first-name")?.value.trim() || ""}
-       ${document.getElementById("last-name")?.value.trim() || ""}`
-        .trim(),
-
-    email:
-      document.getElementById("email")?.value.trim() || "",
-
-    phone:
-      document.getElementById("phone")?.value.trim() || ""
-
-  },
+  const firstName =
+    document.getElementById(
+      "first-name"
+    )?.value.trim() || "";
 
 
-  /* Delivery */
+  const lastName =
+    document.getElementById(
+      "last-name"
+    )?.value.trim() || "";
 
-  delivery: {
+
+  const customerName =
+    `${firstName} ${lastName}`.trim();
+
+
+  const customerEmail =
+    document.getElementById(
+      "email"
+    )?.value.trim() || "";
+
+
+  const customerPhone =
+    document.getElementById(
+      "phone"
+    )?.value.trim() || "";
+
+
+  /* Delivery information */
+
+  const delivery = {
 
     address:
-      document.getElementById("address")?.value.trim() || "",
+      document.getElementById(
+        "address"
+      )?.value.trim() || "",
 
     apartment:
-      document.getElementById("apartment")?.value.trim() || "",
+      document.getElementById(
+        "apartment"
+      )?.value.trim() || "",
 
     city:
-      document.getElementById("city")?.value.trim() || "",
+      document.getElementById(
+        "city"
+      )?.value.trim() || "",
 
     state:
-      document.getElementById("state")?.value.trim() || "",
+      document.getElementById(
+        "state"
+      )?.value.trim() || "",
 
     postalCode:
-      document.getElementById("postal-code")?.value.trim() || "",
+      document.getElementById(
+        "postal-code"
+      )?.value.trim() || "",
 
     country:
-      document.getElementById("country")?.value.trim() || ""
-
-  },
-
-
-  /* Shipping */
-
-  shipping: {
-
-    method:
-      selectedShipping === "express"
-        ? "Express delivery"
-        : "Standard delivery",
-
-    cost:
-      totals.shipping
-
-  },
+      document.getElementById(
+        "country"
+      )?.value.trim() || ""
+  };
 
 
-  /* Payment */
+  /* Prepare products for backend */
 
-  payment: {
+  const orderItems =
+    items.map((item) => {
 
-    method:
-      document.querySelector(
-        'input[name="payment"]:checked'
-      )?.value === "cash"
-        ? "Cash on Delivery"
-        : "Credit / Debit Card",
-
-    status:
-      document.querySelector(
-        'input[name="payment"]:checked'
-      )?.value === "cash"
-        ? "Pending"
-        : "Demo payment"
-
-  },
+      const productId =
+        item.productId ??
+        item.product?.id ??
+        item.id;
 
 
-  /* Products */
+      return {
 
-  items,
+        productId,
 
-  totals,
+        quantity:
+          item.quantity,
 
-  coupon: appliedCoupon,
+        size:
+          item.size || null,
 
-  status: "Order placed",
+        color:
+          item.color || null
+      };
 
-  createdAt:
-    new Date().toISOString()
-
-};
-
-
-/* Get existing orders */
-
-const orders = JSON.parse(
-  localStorage.getItem("threadco_orders")
-) || [];
+    });
 
 
-/* Add new order */
+  /* Complete order payload */
 
-orders.push(order);
+  const orderData = {
+
+    items: orderItems,
+
+    customer: {
+
+      name:
+        customerName,
+
+      email:
+        customerEmail,
+
+      phone:
+        customerPhone
+    },
+
+    delivery,
+
+    shippingMethod:
+      selectedShipping,
+
+    couponCode:
+      appliedCoupon?.code || null,
+
+    paymentMethod
+
+  };
 
 
-/* Save all orders */
+  /* ----------------------------------------------------------------------
+     SEND ORDER TO BACKEND
+     ---------------------------------------------------------------------- */
 
-localStorage.setItem(
-  "threadco_orders",
-  JSON.stringify(orders)
-);
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/api/orders`,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            ...(localStorage.getItem("threadco_token")
+              ? {
+                  Authorization:
+                    `Bearer ${localStorage.getItem("threadco_token")}`
+                  }
+              : {})
+
+          },
+
+          body:
+            JSON.stringify(orderData)
+
+        }
+      );
 
 
-/* Save latest order separately */
-
-localStorage.setItem(
-  "threadco_last_order",
-  JSON.stringify(order)
-);
+    const result =
+      await response.json();
 
 
-  /* Clear cart */
+    /* Backend error */
 
-  clearCart();
+    if (!response.ok) {
 
-  /* Clear applied coupon*/ 
+      console.error(
+        "Backend order error:",
+        result
+      );
 
-  localStorage.removeItem("threadco_coupon");
+
+      alert(
+        result.error ||
+        "Unable to place order. Please try again."
+      );
+
+      return;
+    }
 
 
-  /* Show success modal */
+    /* --------------------------------------------------------------------
+       ORDER CREATED SUCCESSFULLY
+       -------------------------------------------------------------------- */
 
-  const modal =
-    document.getElementById(
-      "order-success-modal"
+    console.log(
+      "Order created successfully:",
+      result
     );
 
 
-  if (modal) {
+    /* Save latest order for success UI */
 
-    modal.hidden =
-      false;
+    if (result.order) {
+
+      localStorage.setItem(
+        "threadco_last_order",
+        JSON.stringify(
+          result.order
+        )
+      );
+
+    }
+
+
+    /* Clear cart */
+
+    clearCart();
+
+
+    /* Clear coupon */
+
+    appliedCoupon = null;
+
+    localStorage.removeItem(
+      "threadco_coupon"
+    );
+
+
+    /* Show order number */
+
+    const orderNumberElement =
+      document.getElementById(
+        "success-order-number"
+      );
+
+
+    if (
+      orderNumberElement &&
+      result.order
+    ) {
+
+      orderNumberElement.textContent =
+        result.order.order_number ||
+        result.order.orderNumber ||
+        "Confirmed";
+
+    }
+
+
+    /* Show success modal */
+
+    const modal =
+      document.getElementById(
+        "order-success-modal"
+      );
+
+
+    if (modal) {
+
+      modal.hidden = false;
+
+    } else {
+
+      alert(
+        "Order placed successfully!"
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Order creation failed:",
+      error
+    );
+
+
+    alert(
+      "Unable to connect to the server. Please make sure the backend is running."
+    );
+
   }
+
 }
 
 
@@ -1157,10 +1288,11 @@ function attachEvents() {
       "submit",
       handleCoupon
     );
+
   }
 
 
-  /* Form */
+  /* Checkout form */
 
   const checkoutForm =
     document.getElementById(
@@ -1174,6 +1306,7 @@ function attachEvents() {
       "submit",
       handlePlaceOrder
     );
+
   }
 
 
@@ -1224,6 +1357,7 @@ function attachEvents() {
       "input",
       formatCardNumber
     );
+
   }
 
 
@@ -1241,6 +1375,7 @@ function attachEvents() {
       "input",
       formatExpiry
     );
+
   }
 
 }
@@ -1254,26 +1389,27 @@ window.addEventListener(
   "cart:updated",
   () => {
 
-    if (
+    const checkoutItems =
       document.getElementById(
         "checkout-items"
-      )
-    ) {
-
-      const items =
-        getCartWithProductDetails();
+      );
 
 
-      if (
-        items.length === 0
-      ) {
+    if (!checkoutItems) return;
 
-        renderEmptyCheckout();
 
-      } else {
+    const items =
+      getCartWithProductDetails();
 
-        renderCheckout();
-      }
+
+    if (items.length === 0) {
+
+      renderEmptyCheckout();
+
+    } else {
+
+      renderCheckout();
+
     }
 
   }
