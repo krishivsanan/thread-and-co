@@ -67,39 +67,40 @@
 
       </nav>
 
+      <!-- SEARCH BAR -->
+      <form class="navbar__search" role="search" action="products.html" method="get">
+        <label for="site-search" class="visually-hidden">Search products</label>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="search" id="site-search" name="q" placeholder="Search products..." />
+      </form>
+
+      <!-- ACTIONS -->
       <div class="navbar__actions">
-
-        <a
-          href="wishlist.html"
-          class="navbar__icon-btn"
-          aria-label="Wishlist"
-        >
-          ♡
+        <a href="wishlist.html" class="navbar__icon-btn" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6.7-4.35-9.3-8.1C1 10.1 1.6 6.6 4.6 5.1c2.4-1.2 5 0 7.4 3 2.4-3 5-4.2 7.4-3 3 1.5 3.6 5 1.9 7.8C18.7 16.65 12 21 12 21z" />
+          </svg>
+          <span class="navbar__icon-badge navbar__wishlist-badge" hidden>0</span>
         </a>
 
-        <a
-          href="account.html"
-          class="navbar__icon-btn"
-          aria-label="Account"
-        >
-          ♙
+        <a href="account.html" class="navbar__icon-btn" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6" />
+          </svg>
         </a>
 
-        <a
-          href="cart.html"
-          class="navbar__icon-btn"
-          aria-label="Cart"
-        >
-          🛒
-
-          <span
-            class="navbar__icon-badge"
-            hidden
-          >
-            0
-          </span>
+        <a href="cart.html" class="navbar__icon-btn" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="19" cy="21" r="1" />
+            <path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6" />
+          </svg>
+          <span class="navbar__icon-badge navbar__cart-badge" hidden>0</span>
         </a>
-
       </div>
 
       <button

@@ -36,7 +36,7 @@
    ========================================================================== */
 
 (() => {
-  const API_BASE = window.THREADCO_API_BASE || "http://localhost:4000/api";
+  const API_BASE = (window.THREADCO_API_BASE || "http://localhost:4000/api").replace(/\/$/, "");
   const FETCH_TIMEOUT_MS = 4000;
 
   function withTimeout(promise, ms) {

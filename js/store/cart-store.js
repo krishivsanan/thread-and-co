@@ -148,6 +148,10 @@ function getWishlist() {
   return readStorage(WISHLIST_STORAGE_KEY, []);
 }
 
+function getWishlistCount() {
+  return getWishlist().length;
+}
+
 function saveWishlist(wishlist) {
   writeStorage(WISHLIST_STORAGE_KEY, wishlist);
   dispatchStoreEvent("wishlist:updated", wishlist);

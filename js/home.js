@@ -6,18 +6,24 @@
    is already set up by the time this file runs.
    ========================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   initNewArrivalsScroller();
   initCountdown();
-  initWishlistButtons();
-  initAddToCartButtons();
+
+  if (window.PRODUCTS_READY) {
+    await window.PRODUCTS_READY;
+  }
+
+  renderFeaturedProducts();
+  renderNewArrivals();
+  initDelegatedProductActions();
 });
+
+// Sync hearts if wishlist changes elsewhere
+window.addEventListener("wishlist:updated", updateHomepageWishlistHearts);
 
 /* ------------------------------------------------------------------------
    1. NEW ARRIVALS HORIZONTAL SCROLLER
-   The "New Arrivals" section scrolls sideways (see .scroller__track in
-   home.css, which has overflow-x: auto). These left/right buttons just
-   nudge that scroll position instead of making the user drag manually.
    ------------------------------------------------------------------------ */
 function initNewArrivalsScroller() {
   const track = document.querySelector(".scroller__track");
@@ -26,7 +32,6 @@ function initNewArrivalsScroller() {
 
   if (!track || !prevBtn || !nextBtn) return;
 
-  // Scroll by roughly "one card's width" each click.
   const SCROLL_AMOUNT = 280;
 
   prevBtn.addEventListener("click", () => {
@@ -40,213 +45,126 @@ function initNewArrivalsScroller() {
 
 /* ------------------------------------------------------------------------
    2. OFFER COUNTDOWN TIMER
-   Purely visual for the demo: counts down to a fixed target date/time so
-   the "limited time offer" banner feels alive. Later, Module 5 (Checkout
-   & Coupons) can swap FIXED_TARGET_DATE for a real expiry date that comes
-   from the coupon data in the database.
    ------------------------------------------------------------------------ */
 function initCountdown() {
-
-  const countdownEl =
-    document.querySelector(".countdown");
-
+  const countdownEl = document.querySelector(".countdown");
   if (!countdownEl) return;
 
+  const hoursEl = countdownEl.querySelector("[data-unit='hours']");
+  const minutesEl = countdownEl.querySelector("[data-unit='minutes']");
+  const secondsEl = countdownEl.querySelector("[data-unit='seconds']");
 
-  const hoursEl =
-    countdownEl.querySelector(
-      "[data-unit='hours']"
-    );
+  if (!hoursEl || !minutesEl || !secondsEl) return;
 
-  const minutesEl =
-    countdownEl.querySelector(
-      "[data-unit='minutes']"
-    );
+  const COUNTDOWN_KEY = "threadco_sale_end";
+  let targetTime = Number(localStorage.getItem(COUNTDOWN_KEY));
 
-  const secondsEl =
-    countdownEl.querySelector(
-      "[data-unit='seconds']"
-    );
-
-
-  if (
-    !hoursEl ||
-    !minutesEl ||
-    !secondsEl
-  ) {
-    return;
+  if (!targetTime || targetTime <= Date.now()) {
+    targetTime = Date.now() + 48 * 60 * 60 * 1000;
+    localStorage.setItem(COUNTDOWN_KEY, String(targetTime));
   }
-
-
-  const COUNTDOWN_KEY =
-    "threadco_sale_end";
-
-
-  /*
-   * Check whether an expiry time already exists.
-   */
-
-  let targetTime =
-    Number(
-      localStorage.getItem(
-        COUNTDOWN_KEY
-      )
-    );
-
-
-  /*
-   * First visit:
-   * create a 48-hour countdown.
-   */
-
-  if (
-    !targetTime ||
-    targetTime <= Date.now()
-  ) {
-
-    targetTime =
-      Date.now() +
-      48 * 60 * 60 * 1000;
-
-
-    localStorage.setItem(
-      COUNTDOWN_KEY,
-      String(targetTime)
-    );
-
-  }
-
 
   function updateCountdown() {
-
-    const difference =
-      Math.max(
-        0,
-        targetTime - Date.now()
-      );
-
-
-    let totalSeconds =
-      Math.floor(
-        difference / 1000
-      );
-
-
-    const hours =
-      Math.floor(
-        totalSeconds / 3600
-      );
-
-
+    const difference = Math.max(0, targetTime - Date.now());
+    let totalSeconds = Math.floor(difference / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
     totalSeconds %= 3600;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
+    hoursEl.textContent = String(hours).padStart(2, "0");
+    minutesEl.textContent = String(minutes).padStart(2, "0");
+    secondsEl.textContent = String(seconds).padStart(2, "0");
 
-    const minutes =
-      Math.floor(
-        totalSeconds / 60
-      );
-
-
-    const seconds =
-      totalSeconds % 60;
-
-
-    hoursEl.textContent =
-      String(hours).padStart(
-        2,
-        "0"
-      );
-
-
-    minutesEl.textContent =
-      String(minutes).padStart(
-        2,
-        "0"
-      );
-
-
-    secondsEl.textContent =
-      String(seconds).padStart(
-        2,
-        "0"
-      );
-
-
-    /*
-     * Stop when countdown reaches zero.
-     */
-
-    if (
-      difference <= 0
-    ) {
-
+    if (difference <= 0) {
       clearInterval(timer);
-
     }
-
   }
 
-
   updateCountdown();
-
-
-  const timer =
-    setInterval(
-      updateCountdown,
-      1000
-    );
-
+  const timer = setInterval(updateCountdown, 1000);
 }
 
 /* ------------------------------------------------------------------------
-   3. WISHLIST HEART BUTTONS ON PRODUCT CARDS
-   Toggles the wishlist via js/store/cart-store.js (localStorage-backed)
-   and reflects that in the heart icon. Each button carries the
-   product's id in data-product-id.
+   3. DYNAMIC PRODUCTS RENDERING
    ------------------------------------------------------------------------ */
-function initWishlistButtons() {
-  const wishlistButtons = document.querySelectorAll(".product-card__wishlist");
+function renderFeaturedProducts() {
+  const container = document.getElementById("featured-grid");
+  if (!container || typeof createProductCardHTML !== "function") return;
 
-  wishlistButtons.forEach((button) => {
-    const productId = Number(button.dataset.productId);
+  const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+  if (products.length === 0) return;
 
-    // These cards are hard-coded HTML (not built by createProductCardHTML
-    // like the catalogue/related-products grids are), so their initial
-    // "is this already wishlisted?" state has to be set here on load
-    // instead of at render time.
-    if (isInWishlist(productId)) {
-      button.classList.add("is-active");
-      button.setAttribute("aria-pressed", "true");
+  // Curate 4 featured items (prioritize high ratings and distinct categories)
+  const featured = [...products]
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 4);
+
+  container.innerHTML = featured.map(createProductCardHTML).join("");
+}
+
+function renderNewArrivals() {
+  const track = document.getElementById("new-arrivals-track") || document.querySelector(".scroller__track");
+  if (!track || typeof createProductCardHTML !== "function") return;
+
+  const products = Array.isArray(window.PRODUCTS) ? window.PRODUCTS : [];
+  if (products.length === 0) return;
+
+  // New arrivals: items marked isNew, or sorted by dateAdded descending
+  const newArrivals = products
+    .filter((p) => p.isNew)
+    .concat(products.filter((p) => !p.isNew))
+    .slice(0, 6);
+
+  track.innerHTML = newArrivals.map(createProductCardHTML).join("");
+}
+
+/* ------------------------------------------------------------------------
+   4. DELEGATED EVENT HANDLERS (Wishlist & Add to Cart)
+   ------------------------------------------------------------------------ */
+function initDelegatedProductActions() {
+  document.addEventListener("click", (event) => {
+    // 1. Wishlist toggle
+    const wishlistBtn = event.target.closest(".product-card__wishlist");
+    if (wishlistBtn) {
+      const productId = Number(wishlistBtn.dataset.productId);
+      if (!productId || typeof toggleWishlist !== "function") return;
+
+      const isNowActive = toggleWishlist(productId);
+      syncWishlistButtons(productId, isNowActive);
+      return;
     }
 
-    button.addEventListener("click", () => {
-      const isNowActive = toggleWishlist(productId); // js/store/cart-store.js
-      button.classList.toggle("is-active", isNowActive);
-      button.setAttribute("aria-pressed", isNowActive ? "true" : "false");
-    });
+    // 2. Add to cart
+    const addBtn = event.target.closest(".product-card__add");
+    if (addBtn) {
+      const productId = Number(addBtn.dataset.productId);
+      if (!productId || typeof addToCart !== "function") return;
+
+      addToCart({ productId, quantity: 1 });
+      const originalText = addBtn.textContent;
+      addBtn.textContent = "Added ✓";
+      setTimeout(() => {
+        addBtn.textContent = originalText;
+      }, 1200);
+    }
   });
 }
 
-/* ------------------------------------------------------------------------
-   4. "ADD TO CART" BUTTONS ON PRODUCT CARDS
-   Adds the product to the cart via js/store/cart-store.js and gives
-   quick visual feedback on the button itself.
-   ------------------------------------------------------------------------ */
-function initAddToCartButtons() {
-  const addToCartButtons = document.querySelectorAll(".product-card__add");
+function syncWishlistButtons(productId, isActive) {
+  document.querySelectorAll(`.product-card__wishlist[data-product-id="${productId}"]`).forEach((btn) => {
+    btn.classList.toggle("is-active", isActive);
+    btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
 
-  addToCartButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const productId = Number(button.dataset.productId);
-      const originalText = button.textContent;
-
-      addToCart({ productId, quantity: 1 }); // js/store/cart-store.js
-      button.textContent = "Added ✓";
-
-      // Reset the button label after a moment so it can be clicked again.
-      setTimeout(() => {
-        button.textContent = originalText;
-      }, 1200);
-    });
+function updateHomepageWishlistHearts() {
+  if (typeof isInWishlist !== "function") return;
+  document.querySelectorAll(".product-card__wishlist").forEach((btn) => {
+    const productId = Number(btn.dataset.productId);
+    if (!productId) return;
+    const active = isInWishlist(productId);
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
   });
 }

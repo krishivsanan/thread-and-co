@@ -6,7 +6,7 @@
    API
    -------------------------------------------------------------------------- */
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = (window.THREADCO_API_BASE || "http://localhost:4000/api").replace(/\/$/, "");
 
 
 /* --------------------------------------------------------------------------
@@ -39,7 +39,11 @@ let selectedShipping = "standard";
    DOM READY
    -------------------------------------------------------------------------- */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+  if (window.PRODUCTS_READY) {
+    await window.PRODUCTS_READY;
+  }
 
   const items = getCartWithProductDetails();
 
@@ -1016,7 +1020,7 @@ async function handlePlaceOrder(event) {
 
     const response =
       await fetch(
-        `${API_BASE}/api/orders`,
+        `${API_BASE}/orders`,
         {
 
           method: "POST",

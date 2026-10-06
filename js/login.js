@@ -3,7 +3,7 @@
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const API_BASE = window.THREADCO_API_BASE || "http://localhost:4000/api";
+  const API_BASE = (window.THREADCO_API_BASE || "http://localhost:4000/api").replace(/\/$/, "");
 
   const currentUser = JSON.parse(
     localStorage.getItem("threadco_current_user")

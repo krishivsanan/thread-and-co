@@ -2,7 +2,7 @@
    ACCOUNT PAGE
    ========================================================================== */
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = (window.THREADCO_API_BASE || "http://localhost:4000/api").replace(/\/$/, "");
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const response =
       await fetch(
-        `${API_BASE}/api/orders`,
+        `${API_BASE}/orders`,
         {
           method: "GET",
 

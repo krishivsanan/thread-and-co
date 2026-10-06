@@ -15,7 +15,10 @@
    css/components.css for visual consistency.
    ========================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  if (window.PRODUCTS_READY) {
+    await window.PRODUCTS_READY;
+  }
   render();
   attachEvents();
 });
