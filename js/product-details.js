@@ -50,6 +50,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     return; // stop here - nothing else on the page has data to show
   }
 
+  window.CURRENT_PRODUCT = product;
+  window.selectProductSize = function(size) {
+    if (!product || !Array.isArray(product.sizes)) return false;
+    if (!product.sizes.includes(size)) return false;
+    pdState.selectedSize = size;
+    renderInfo();
+    return true;
+  };
+
   // Pre-select when there's only one real option, so the shopper isn't
   // forced to click a selector that doesn't actually offer a choice.
   if (product.colors.length === 1) pdState.selectedColor = product.colors[0];
@@ -61,6 +70,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderRelatedProducts();
   renderBreadcrumb();
   attachEvents();
+
+  window.dispatchEvent(new CustomEvent("product:loaded", { detail: product }));
 });
 
 const CATEGORY_LABELS_PD = { men: "Men", women: "Women", shoes: "Shoes", accessories: "Accessories" };

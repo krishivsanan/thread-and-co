@@ -169,23 +169,7 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-    <script>
-      function ReactFeature() {
-        const [saved, setSaved] = React.useState(false);
-    
-        return React.createElement(
-          "button",
-          {
-            onClick: () => setSaved(!saved)
-          },
-          saved ? "♥ Saved" : "♡ Save for later"
-        );
-      }
-    
-      ReactDOM.createRoot(
-        document.getElementById("react-feature")
-      ).render(React.createElement(ReactFeature));
-    </script>
+    <script src="js/react-size-advisor.js"></script>
     <script src="js/ai-stylist.js"></script>
   </body>
 </html>
