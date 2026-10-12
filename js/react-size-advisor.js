@@ -209,7 +209,7 @@
                 "button",
                 {
                   type: "button",
-                  className: `fit-advisor__unit-tab ${unitSystem === "metric" ? "is-active" : ""}`,
+                  className: `fit-advisor__unit-btn ${unitSystem === "metric" ? "active" : ""}`,
                   onClick: () => handleUnitChange("metric"),
                 },
                 "Metric (cm / kg)"
@@ -218,7 +218,7 @@
                 "button",
                 {
                   type: "button",
-                  className: `fit-advisor__unit-tab ${unitSystem === "imperial" ? "is-active" : ""}`,
+                                    className: `fit-advisor__unit-btn ${unitSystem === "imperial" ? "active" : ""}`,
                   onClick: () => handleUnitChange("imperial"),
                 },
                 "Imperial (in / lbs)"
@@ -297,7 +297,7 @@
                   {
                     key: f,
                     type: "button",
-                    className: `fit-advisor__chip ${fitPreference === f ? "is-selected" : ""}`,
+                    className: `fit-advisor__chip ${fitPreference === f ? "active" : ""}`,
                     onClick: () => setFitPreference(f),
                   },
                   f.charAt(0).toUpperCase() + f.slice(1)
