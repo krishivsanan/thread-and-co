@@ -22,7 +22,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 201,
     photoUrl:
-      "https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80",
     name: "Classic Crew Tee",
     brand: "Thread & Co.",
     category: "men",
