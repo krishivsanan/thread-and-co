@@ -253,6 +253,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   /* ----------------------------------------------------------------------
+     INITIALIZE TABS & PROFILE EDITING
+     ---------------------------------------------------------------------- */
+
+  const navOrdersCount = document.getElementById("nav-orders-count");
+  if (navOrdersCount) {
+    navOrdersCount.textContent = userOrders.length;
+  }
+
+  const profilePhone = document.getElementById("profile-phone");
+  if (profilePhone && currentUser.phone) {
+    profilePhone.hidden = false;
+    profilePhone.textContent = currentUser.phone;
+  }
+
+  initAccountTabs();
+  initAccountProfile(currentUser, accountUserName, profileName, profileAvatar, profilePhone);
+
+
+  /* ----------------------------------------------------------------------
      LOGOUT
      ---------------------------------------------------------------------- */
 
@@ -286,6 +305,212 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 });
+
+/* ==========================================================================
+   TABS NAVIGATION
+   ========================================================================== */
+
+function initAccountTabs() {
+  const tabOrders = document.getElementById("tab-orders");
+  const tabProfile = document.getElementById("tab-profile");
+  const sectionOrders = document.getElementById("section-orders");
+  const sectionProfile = document.getElementById("section-profile");
+
+  if (!tabOrders || !tabProfile || !sectionOrders || !sectionProfile) return;
+
+  function switchTab(tabName) {
+    if (tabName === "profile") {
+      tabProfile.classList.add("is-active");
+      tabOrders.classList.remove("is-active");
+      sectionProfile.hidden = false;
+      sectionOrders.hidden = true;
+      history.replaceState(null, "", "#profile");
+    } else {
+      tabOrders.classList.add("is-active");
+      tabProfile.classList.remove("is-active");
+      sectionOrders.hidden = false;
+      sectionProfile.hidden = true;
+      history.replaceState(null, "", "#orders");
+    }
+  }
+
+  tabOrders.addEventListener("click", () => switchTab("orders"));
+  tabProfile.addEventListener("click", () => switchTab("profile"));
+
+  // Check URL hash for direct tab linking
+  if (window.location.hash === "#profile" || window.location.hash === "#settings") {
+    switchTab("profile");
+  }
+}
+
+/* ==========================================================================
+   PROFILE & ADDRESS MANAGEMENT
+   ========================================================================== */
+
+function initAccountProfile(user, accountUserName, profileName, profileAvatar, profilePhone) {
+  let currentUser = { ...user };
+  const form = document.getElementById("profile-form");
+  const feedback = document.getElementById("profile-feedback");
+  const saveBtn = document.getElementById("save-profile-btn");
+
+  if (!form) return;
+
+  // Pre-fill personal info
+  const nameInput = document.getElementById("edit-name");
+  const emailInput = document.getElementById("edit-email");
+  const phoneInput = document.getElementById("edit-phone");
+
+  if (nameInput) nameInput.value = currentUser.name || "";
+  if (emailInput) emailInput.value = currentUser.email || "";
+  if (phoneInput) phoneInput.value = currentUser.phone || "";
+
+  // Pre-fill address from localStorage if exists
+  let savedAddress = {};
+  try {
+    savedAddress = JSON.parse(localStorage.getItem("threadco_saved_address")) || {};
+  } catch (e) {
+    savedAddress = {};
+  }
+
+  const addressInput = document.getElementById("edit-address");
+  const aptInput = document.getElementById("edit-apartment");
+  const cityInput = document.getElementById("edit-city");
+  const stateInput = document.getElementById("edit-state");
+  const postalInput = document.getElementById("edit-postal-code");
+  const countryInput = document.getElementById("edit-country");
+
+  if (addressInput) addressInput.value = savedAddress.address || "";
+  if (aptInput) aptInput.value = savedAddress.apartment || "";
+  if (cityInput) cityInput.value = savedAddress.city || "";
+  if (stateInput) stateInput.value = savedAddress.state || "";
+  if (postalInput) postalInput.value = savedAddress.postalCode || "";
+  if (countryInput) countryInput.value = savedAddress.country || "";
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = nameInput ? nameInput.value.trim() : "";
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const currentPasswordInput = document.getElementById("edit-current-password");
+    const newPasswordInput = document.getElementById("edit-new-password");
+    const confirmPasswordInput = document.getElementById("edit-confirm-password");
+
+    const currentPassword = currentPasswordInput ? currentPasswordInput.value : "";
+    const newPassword = newPasswordInput ? newPasswordInput.value : "";
+    const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : "";
+
+    // Validate password change if attempted
+    if (newPassword || confirmPassword || currentPassword) {
+      if (!currentPassword) {
+        showProfileFeedback(feedback, "Current password is required to change password.", "error");
+        currentPasswordInput.focus();
+        return;
+      }
+      if (newPassword.length < 6) {
+        showProfileFeedback(feedback, "New password must be at least 6 characters.", "error");
+        newPasswordInput.focus();
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        showProfileFeedback(feedback, "New passwords do not match. Please verify.", "error");
+        confirmPasswordInput.focus();
+        return;
+      }
+    }
+
+    // Save shipping address to localStorage
+    const addressData = {
+      address: addressInput ? addressInput.value.trim() : "",
+      apartment: aptInput ? aptInput.value.trim() : "",
+      city: cityInput ? cityInput.value.trim() : "",
+      state: stateInput ? stateInput.value.trim() : "",
+      postalCode: postalInput ? postalInput.value.trim() : "",
+      country: countryInput ? countryInput.value.trim() : "",
+    };
+    localStorage.setItem("threadco_saved_address", JSON.stringify(addressData));
+
+    // Send update request to server
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Saving...";
+    }
+
+    try {
+      const token = localStorage.getItem("threadco_token");
+      const payload = {
+        name,
+        phone,
+      };
+
+      if (newPassword) {
+        payload.currentPassword = currentPassword;
+        payload.newPassword = newPassword;
+      }
+
+      const response = await fetch(`${API_BASE}/auth/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to update profile.");
+      }
+
+      // Update current user in memory and localStorage
+      const updatedUser = {
+        ...currentUser,
+        name: result.user.name,
+        phone: result.user.phone,
+        savedAddress: addressData,
+      };
+      currentUser = updatedUser;
+      localStorage.setItem("threadco_current_user", JSON.stringify(updatedUser));
+
+      // Update UI displays
+      if (accountUserName) accountUserName.textContent = updatedUser.name;
+      if (profileName) profileName.textContent = updatedUser.name;
+      if (profileAvatar) {
+        profileAvatar.textContent = (updatedUser.name || "U").charAt(0).toUpperCase();
+      }
+      if (profilePhone) {
+        profilePhone.hidden = !updatedUser.phone;
+        profilePhone.textContent = updatedUser.phone || "";
+      }
+
+      // Clear password inputs
+      if (currentPasswordInput) currentPasswordInput.value = "";
+      if (newPasswordInput) newPasswordInput.value = "";
+      if (confirmPasswordInput) confirmPasswordInput.value = "";
+
+      showProfileFeedback(feedback, "Profile and default shipping address saved successfully!", "success");
+    } catch (err) {
+      console.error("Profile update error:", err);
+      showProfileFeedback(feedback, err.message, "error");
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Changes";
+      }
+    }
+  });
+}
+
+function showProfileFeedback(el, message, type) {
+  if (!el) return;
+  el.hidden = false;
+  el.className = `account-feedback account-feedback--${type}`;
+  el.innerHTML = `
+    <span class="account-feedback__icon">${type === "success" ? "✓" : "⚠️"}</span>
+    <span>${message}</span>
+  `;
+  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 
 
 /* ==========================================================================

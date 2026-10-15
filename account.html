@@ -210,6 +210,29 @@
             user@example.com
           </p>
 
+          <p id="profile-phone" class="profile-phone" hidden></p>
+
+
+          <div class="profile-divider"></div>
+
+          <nav class="account-nav" aria-label="Account sections">
+            <button
+              type="button"
+              id="tab-orders"
+              class="account-nav__btn is-active"
+            >
+              <span>Your orders</span>
+              <span id="nav-orders-count" class="account-nav__badge">0</span>
+            </button>
+
+            <button
+              type="button"
+              id="tab-profile"
+              class="account-nav__btn"
+            >
+              <span>Profile & Address</span>
+            </button>
+          </nav>
 
           <div class="profile-divider"></div>
 
@@ -224,9 +247,9 @@
         </aside>
 
 
-        <!-- ORDERS -->
+        <!-- ORDERS SECTION -->
 
-        <section class="account-orders">
+        <section id="section-orders" class="account-orders">
 
 
           <div class="account-orders__header">
@@ -265,6 +288,116 @@
 
           </div>
 
+
+        </section>
+
+
+        <!-- PROFILE & ADDRESS SETTINGS SECTION -->
+
+        <section id="section-profile" class="account-settings" hidden>
+
+          <div class="account-settings__header">
+
+            <div>
+
+              <p class="account-settings__eyebrow">
+                ACCOUNT SETTINGS
+              </p>
+
+              <h2>
+                Profile & Address
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div id="profile-feedback" class="account-feedback" hidden></div>
+
+          <form id="profile-form" class="account-form">
+
+            <!-- Personal Info -->
+            <div class="account-form__section">
+              <h3 class="account-form__title">Personal Details</h3>
+              <div class="account-form__grid">
+                <div class="form-group">
+                  <label for="edit-name">Full Name</label>
+                  <input type="text" id="edit-name" name="name" required placeholder="Your full name" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-email">Email Address <span class="form-group__note">(Read-only)</span></label>
+                  <input type="email" id="edit-email" name="email" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="edit-phone">Phone Number</label>
+                  <input type="tel" id="edit-phone" name="phone" placeholder="+1 (555) 000-0000" />
+                </div>
+              </div>
+            </div>
+
+            <div class="account-form__divider"></div>
+
+            <!-- Shipping Address -->
+            <div class="account-form__section">
+              <h3 class="account-form__title">Default Shipping Address</h3>
+              <p class="account-form__subtitle">Saved address will automatically prefill your shipping details at checkout.</p>
+              <div class="account-form__grid">
+                <div class="form-group form-group--full">
+                  <label for="edit-address">Street Address</label>
+                  <input type="text" id="edit-address" name="address" placeholder="123 Fashion Blvd" />
+                </div>
+                <div class="form-group form-group--full">
+                  <label for="edit-apartment">Apartment, suite, unit (optional)</label>
+                  <input type="text" id="edit-apartment" name="apartment" placeholder="Suite 400" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-city">City</label>
+                  <input type="text" id="edit-city" name="city" placeholder="New York" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-state">State / Province</label>
+                  <input type="text" id="edit-state" name="state" placeholder="NY" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-postal-code">Postal / ZIP Code</label>
+                  <input type="text" id="edit-postal-code" name="postalCode" placeholder="10001" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-country">Country</label>
+                  <input type="text" id="edit-country" name="country" placeholder="United States" />
+                </div>
+              </div>
+            </div>
+
+            <div class="account-form__divider"></div>
+
+            <!-- Password Change -->
+            <div class="account-form__section">
+              <h3 class="account-form__title">Change Password</h3>
+              <p class="account-form__subtitle">Leave password fields blank unless you wish to update your password.</p>
+              <div class="account-form__grid">
+                <div class="form-group form-group--full">
+                  <label for="edit-current-password">Current Password</label>
+                  <input type="password" id="edit-current-password" name="currentPassword" placeholder="••••••••" autocomplete="current-password" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-new-password">New Password</label>
+                  <input type="password" id="edit-new-password" name="newPassword" placeholder="At least 6 characters" minlength="6" autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                  <label for="edit-confirm-password">Confirm New Password</label>
+                  <input type="password" id="edit-confirm-password" name="confirmPassword" placeholder="Repeat new password" autocomplete="new-password" />
+                </div>
+              </div>
+            </div>
+
+            <div class="account-form__actions">
+              <button type="submit" id="save-profile-btn" class="btn btn--primary">
+                Save Changes
+              </button>
+            </div>
+
+          </form>
 
         </section>
 

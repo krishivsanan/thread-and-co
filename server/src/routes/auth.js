@@ -114,4 +114,74 @@ router.get("/me", requireAuth, async (req, res, next) => {
   }
 });
 
+
+/**
+ * PUT /api/auth/profile
+ * header: Authorization: Bearer <token>
+ * body: { name?, phone?, currentPassword?, newPassword? }
+ * Updates the authenticated user's profile fields.
+ */
+router.put("/profile", requireAuth, async (req, res, next) => {
+  try {
+    const { name, phone, currentPassword, newPassword } = req.body || {};
+    const userId = req.user.id;
+
+    // Fetch current user
+    const userResult = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    const user = userResult.rows[0];
+
+    // If changing password, verify current password first
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ error: "Current password is required to set a new password." });
+      }
+      if (typeof newPassword !== "string" || newPassword.length < 6) {
+        return res.status(400).json({ error: "New password must be at least 6 characters." });
+      }
+      const matches = await bcrypt.compare(currentPassword, user.password_hash);
+      if (!matches) {
+        return res.status(401).json({ error: "Current password is incorrect." });
+      }
+    }
+
+    // Build update fields
+    const updates = [];
+    const values = [];
+    let paramIndex = 1;
+
+    if (name !== undefined && typeof name === "string" && name.trim().length > 0) {
+      updates.push(`name = $${paramIndex++}`);
+      values.push(name.trim());
+    }
+
+    if (phone !== undefined) {
+      updates.push(`phone = $${paramIndex++}`);
+      values.push(phone || null);
+    }
+
+    if (newPassword) {
+      const hash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+      updates.push(`password_hash = $${paramIndex++}`);
+      values.push(hash);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: "No fields to update." });
+    }
+
+    values.push(userId);
+    const result = await pool.query(
+      `UPDATE users SET ${updates.join(", ")} WHERE id = $${paramIndex} RETURNING id, name, email, phone`,
+      values
+    );
+
+    res.json({ user: toPublicUser(result.rows[0]) });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

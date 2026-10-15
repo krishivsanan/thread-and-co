@@ -163,6 +163,297 @@
 
 
 /* ---------------------------------------------------------------------- */
+/* ORDER TRACKER WIDGET                                                   */
+/* ---------------------------------------------------------------------- */
+
+.order-tracker__form {
+  margin-top: var(--space-md);
+}
+
+.order-tracker__input-group {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.order-tracker__input {
+  flex: 1;
+  padding: 0.65rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  transition: border-color var(--transition-fast, 0.2s);
+}
+
+.order-tracker__input:focus {
+  outline: none;
+  border-color: var(--color-ink);
+}
+
+.order-tracker__btn {
+  padding: 0.65rem 1.2rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.order-tracker__result {
+  margin-top: var(--space-md);
+}
+
+.order-tracker__loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.order-tracker__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-line);
+  border-top-color: var(--color-brick);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.order-tracker__status {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.order-tracker__status--error {
+  background-color: rgba(184, 51, 42, 0.08);
+  border: 1px solid rgba(184, 51, 42, 0.2);
+  color: var(--color-ink);
+}
+
+.tracker-error__link {
+  color: var(--color-brick);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.order-tracker__card {
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+.order-tracker__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.order-tracker__badge-order {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.order-tracker__date {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 2px;
+}
+
+.order-tracker__badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: rgba(30, 30, 30, 0.08);
+  color: var(--color-ink);
+}
+
+.order-tracker__badge--placed {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.order-tracker__badge--processing {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.order-tracker__badge--shipped {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.order-tracker__badge--delivered {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.order-tracker__badge--cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Timeline progress */
+.tracker-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--space-md) 0;
+  position: relative;
+  padding: 0 var(--space-xs);
+}
+
+.tracker-timeline::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background-color: var(--color-line);
+  z-index: 1;
+}
+
+.tracker-timeline__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  gap: 4px;
+}
+
+.tracker-timeline__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-card);
+  border: 2px solid var(--color-line);
+  transition: all 0.2s ease;
+}
+
+.tracker-timeline__step.is-done .tracker-timeline__dot {
+  background-color: var(--color-brick);
+  border-color: var(--color-brick);
+}
+
+.tracker-timeline__step.is-current .tracker-timeline__dot {
+  box-shadow: 0 0 0 3px rgba(184, 51, 42, 0.25);
+}
+
+.tracker-timeline__label {
+  font-size: 0.68rem;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+}
+
+.tracker-timeline__step.is-done .tracker-timeline__label {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.order-tracker__meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xs) var(--space-md);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-line);
+  font-size: 0.8rem;
+}
+
+.order-tracker__meta-full {
+  grid-column: 1 / -1;
+}
+
+.order-tracker__meta-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
+}
+
+.order-tracker__meta-val {
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.order-tracker__items-section {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-line);
+}
+
+.order-tracker__items-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.tracker-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.tracker-item__img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-line);
+}
+
+.tracker-item__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tracker-item__name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tracker-item__meta {
+  font-size: 0.7rem;
+  color: var(--color-muted);
+}
+
+.tracker-item__price {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* ---------------------------------------------------------------------- */
 /* RESPONSIVE                                                             */
 /* ---------------------------------------------------------------------- */
 

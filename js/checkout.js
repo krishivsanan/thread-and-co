@@ -54,7 +54,59 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderCheckout();
   attachEvents();
+  prefillCheckoutDetails();
 });
+
+/* --------------------------------------------------------------------------
+   PREFILL SAVED PROFILE & ADDRESS
+   -------------------------------------------------------------------------- */
+
+function prefillCheckoutDetails() {
+  try {
+    const user = JSON.parse(localStorage.getItem("threadco_current_user"));
+    if (user) {
+      const emailField = document.getElementById("email");
+      if (emailField && !emailField.value && user.email) {
+        emailField.value = user.email;
+      }
+
+      if (user.name) {
+        const parts = user.name.trim().split(" ");
+        const firstName = parts[0] || "";
+        const lastName = parts.slice(1).join(" ") || "";
+
+        const fnField = document.getElementById("first-name");
+        const lnField = document.getElementById("last-name");
+        if (fnField && !fnField.value) fnField.value = firstName;
+        if (lnField && !lnField.value) lnField.value = lastName;
+      }
+
+      const phoneField = document.getElementById("phone");
+      if (phoneField && !phoneField.value && user.phone) {
+        phoneField.value = user.phone;
+      }
+    }
+
+    const savedAddr = JSON.parse(localStorage.getItem("threadco_saved_address"));
+    if (savedAddr) {
+      const addrField = document.getElementById("address");
+      const aptField = document.getElementById("apartment");
+      const cityField = document.getElementById("city");
+      const stateField = document.getElementById("state");
+      const zipField = document.getElementById("postal-code");
+      const countryField = document.getElementById("country");
+
+      if (addrField && !addrField.value && savedAddr.address) addrField.value = savedAddr.address;
+      if (aptField && !aptField.value && savedAddr.apartment) aptField.value = savedAddr.apartment;
+      if (cityField && !cityField.value && savedAddr.city) cityField.value = savedAddr.city;
+      if (stateField && !stateField.value && savedAddr.state) stateField.value = savedAddr.state;
+      if (zipField && !zipField.value && savedAddr.postalCode) zipField.value = savedAddr.postalCode;
+      if (countryField && !countryField.value && savedAddr.country) countryField.value = savedAddr.country;
+    }
+  } catch (err) {
+    console.warn("Could not prefill checkout details:", err);
+  }
+}
 
 
 /* --------------------------------------------------------------------------
