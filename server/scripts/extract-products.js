@@ -23,9 +23,9 @@ const source = fs.readFileSync(FRONTEND_DATA_FILE, "utf8");
 // doesn't attach to the sandbox object, so we evaluate the file's source
 // followed by a bare `PRODUCTS` reference in the SAME script — vm.Script
 // returns the value of its last statement, which is the array itself.
-const sandbox = {};
+const sandbox = { window: {} };
 vm.createContext(sandbox);
-const script = new vm.Script(`${source}\n;PRODUCTS`, { filename: FRONTEND_DATA_FILE });
+const script = new vm.Script(`${source}\n;(typeof PRODUCTS_FALLBACK !== "undefined" ? PRODUCTS_FALLBACK : PRODUCTS)`, { filename: FRONTEND_DATA_FILE });
 const products = script.runInContext(sandbox);
 
 if (!Array.isArray(products)) {

@@ -16,9 +16,12 @@ CREATE TABLE IF NOT EXISTS products (
   sizes          JSONB NOT NULL DEFAULT '[]',  -- e.g. ["S", "M", "L"]
   photo_url      TEXT,                    -- external stand-in photo, if any
   placeholder    JSONB,                   -- e.g. {"a": "#4a453e", "b": "#1c1b1a"} gradient fallback
+  description    TEXT,                    -- detailed rich description
   created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS description TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_products_category ON products (category);
 CREATE INDEX IF NOT EXISTS idx_products_price ON products (price);

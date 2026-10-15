@@ -229,6 +229,10 @@ function renderRelatedProducts() {
    ------------------------------------------------------------------------ */
 
 function generateDescription() {
+  if (product.description) {
+    return product.description;
+  }
+
   const categoryPhrase = {
     men: "menswear",
     women: "womenswear",

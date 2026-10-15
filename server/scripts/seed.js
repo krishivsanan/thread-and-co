@@ -30,8 +30,8 @@ async function main() {
       await client.query(
         `INSERT INTO products
            (id, name, brand, category, price, original_price, rating, stock,
-            is_new, date_added, colors, sizes, photo_url, placeholder)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+            is_new, date_added, colors, sizes, photo_url, placeholder, description)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
          ON CONFLICT (id) DO UPDATE SET
            name = EXCLUDED.name,
            brand = EXCLUDED.brand,
@@ -45,7 +45,8 @@ async function main() {
            colors = EXCLUDED.colors,
            sizes = EXCLUDED.sizes,
            photo_url = EXCLUDED.photo_url,
-           placeholder = EXCLUDED.placeholder`,
+           placeholder = EXCLUDED.placeholder,
+           description = EXCLUDED.description`,
         [
           p.id,
           p.name,
@@ -61,6 +62,7 @@ async function main() {
           JSON.stringify(p.sizes ?? []),
           p.photoUrl ?? null,
           p.placeholder ? JSON.stringify(p.placeholder) : null,
+          p.description ?? null,
         ]
       );
     }

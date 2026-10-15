@@ -119,6 +119,7 @@ function toApiShape(row) {
     sizes: row.sizes,
     photoUrl: row.photo_url ?? undefined,
     placeholder: row.placeholder ?? undefined,
+    description: row.description ?? undefined,
   };
 }
 
