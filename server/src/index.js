@@ -5,6 +5,7 @@ const pool = require("./db/pool");
 const productsRouter = require("./routes/products");
 const authRouter = require("./routes/auth");
 const ordersRouter = require("./routes/orders");
+const stylistRouter = require("./routes/stylist");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/api/health", async (req, res) => {
 app.use("/api/products", productsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/api/stylist", stylistRouter);
 
 // 404 for anything under /api that isn't handled above
 app.use("/api", (req, res) => {

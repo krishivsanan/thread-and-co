@@ -289,7 +289,7 @@ function bindAIStylistEvents() {
 
       input.value = "";
 
-      demoStylistResponse(prompt);
+      fetchStylistResponse(prompt);
 
     });
 
@@ -313,7 +313,7 @@ function bindAIStylistEvents() {
 
     input.value = "";
 
-    demoStylistResponse(message);
+    fetchStylistResponse(message);
 
   });
 }
@@ -412,88 +412,183 @@ function addUserMessage(message) {
 
 
 /* ==========================================================================
-   DEMO RESPONSE
+   AI STYLIST BACKEND INTEGRATION (STAGE 2)
    --------------------------------------------------------------------------
-   Temporary only.
-
-   Stage 2 will replace this function with an actual LLM/API request.
+   Communicates with POST /api/stylist (powered by Gemini AI) and renders
+   tailored styling advice along with real interactive product recommendation
+   cards with "View" and "Add to Cart" actions.
    ========================================================================== */
 
-function demoStylistResponse(message) {
+const STYLIST_API_BASE = (window.THREADCO_API_BASE || "http://localhost:4000/api").replace(/\/$/, "");
+let stylistHistory = [];
 
+async function fetchStylistResponse(message) {
   const chat = document.querySelector("#ai-stylist-chat");
+  if (!chat) return;
 
-  if (!chat) {
-    return;
-  }
+  // Render typing / thinking indicator
+  const loadingElement = document.createElement("div");
+  loadingElement.className = "ai-stylist-message ai-stylist-message--ai ai-stylist-message--loading";
+  loadingElement.innerHTML = `
+    <div class="ai-stylist-typing" aria-label="Stylist is thinking">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  `;
+  chat.appendChild(loadingElement);
+  scrollAIStylistChat();
 
+  try {
+    const response = await fetch(`${STYLIST_API_BASE}/stylist`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message,
+        history: stylistHistory,
+      }),
+    });
 
-  setTimeout(() => {
+    loadingElement.remove();
 
+    if (!response.ok) {
+      throw new Error(`Stylist server error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const replyText = data.reply || "Here are pieces from our store that fit your style:";
+    const products = Array.isArray(data.products) ? data.products : [];
+
+    // Save to conversation history (keep last 6 turns)
+    stylistHistory.push(
+      { role: "user", content: message },
+      { role: "model", content: replyText }
+    );
+    if (stylistHistory.length > 8) {
+      stylistHistory = stylistHistory.slice(-8);
+    }
+
+    // Render AI conversational advice bubble
     const responseElement = document.createElement("div");
-
-    responseElement.className =
-      "ai-stylist-message ai-stylist-message--ai";
-
-
+    responseElement.className = "ai-stylist-message ai-stylist-message--ai";
     const bubble = document.createElement("div");
-
     bubble.className = "ai-stylist-message__bubble";
-
-
-    const lowerMessage = message.toLowerCase();
-
-
-    if (
-      lowerMessage.includes("wedding") ||
-      lowerMessage.includes("marriage")
-    ) {
-
-      bubble.textContent =
-        "A wedding is a great place to start. " +
-        "Tell me whether it's a daytime or evening event, " +
-        "your preferred style, and your budget.";
-
-    }
-
-    else if (
-      lowerMessage.includes("party")
-    ) {
-
-      bubble.textContent =
-        "Let's build something that fits the party. " +
-        "Tell me the type of party, your preferred colors, " +
-        "and how much you'd like to spend.";
-
-    }
-
-    else if (
-      lowerMessage.includes("casual")
-    ) {
-
-      bubble.textContent =
-        "For a casual look, tell me what you usually prefer " +
-        "— minimal, relaxed, streetwear, or something else — " +
-        "and I'll help narrow it down.";
-
-    }
-
-    else {
-
-      bubble.textContent =
-        "I'd love to help. Tell me the occasion, your style, " +
-        "preferred colors, and budget.";
-
-    }
-
-
+    bubble.textContent = replyText;
     responseElement.appendChild(bubble);
-
     chat.appendChild(responseElement);
 
-    scrollAIStylistChat();
+    // Render interactive product recommendation cards if available
+    if (products.length > 0) {
+      const cardsContainer = document.createElement("div");
+      cardsContainer.className = "ai-stylist-cards";
 
-  }, 500);
+      products.forEach((product) => {
+        const card = createRecommendationCard(product);
+        cardsContainer.appendChild(card);
+      });
+
+      chat.appendChild(cardsContainer);
+    }
+
+    scrollAIStylistChat();
+  } catch (err) {
+    console.error("AI Stylist request error:", err);
+    loadingElement.remove();
+
+    const errorElement = document.createElement("div");
+    errorElement.className = "ai-stylist-message ai-stylist-message--ai";
+    const bubble = document.createElement("div");
+    bubble.className = "ai-stylist-message__bubble";
+    bubble.textContent = "I'm having a little trouble connecting to the styling engine right now. Please try again in a moment, or explore our collections directly!";
+    errorElement.appendChild(bubble);
+    chat.appendChild(errorElement);
+    scrollAIStylistChat();
+  }
+}
+
+function createRecommendationCard(product) {
+  const card = document.createElement("div");
+  card.className = "ai-stylist-card";
+
+  const photo = product.photo_url || product.photoUrl || `assets/images/products/${product.id}.jpg`;
+  const name = product.name || "Curated Item";
+  const price = Number(product.price || 0).toFixed(2);
+  const category = (product.category || "").toUpperCase();
+
+  card.innerHTML = `
+    <div class="ai-stylist-card__media">
+      <img src="${photo}" alt="${name}" class="ai-stylist-card__img" onerror="this.src='assets/images/products/1.jpg'" />
+      ${category ? `<span class="ai-stylist-card__tag">${category}</span>` : ""}
+    </div>
+    <div class="ai-stylist-card__content">
+      <h4 class="ai-stylist-card__name">${name}</h4>
+      <span class="ai-stylist-card__price">$${price}</span>
+      <div class="ai-stylist-card__actions">
+        <a href="product-details.html?id=${product.id}" class="ai-stylist-card__btn ai-stylist-card__btn--view">
+          View
+        </a>
+        <button type="button" class="ai-stylist-card__btn ai-stylist-card__btn--cart">
+          + Add to Cart
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Attach Add to Cart event listener
+  const cartBtn = card.querySelector(".ai-stylist-card__btn--cart");
+  if (cartBtn) {
+    cartBtn.addEventListener("click", () => {
+      addToCartFromStylist(product, cartBtn);
+    });
+  }
+
+  return card;
+}
+
+function addToCartFromStylist(product, button) {
+  // Use global addToCart if available (from cart-store.js)
+  if (typeof addToCart === "function") {
+    const defaultColor = (product.colors && product.colors[0]) || null;
+    const defaultSize = (product.sizes && product.sizes[0]) || null;
+    addToCart({
+      productId: Number(product.id),
+      size: defaultSize,
+      color: defaultColor,
+      quantity: 1,
+    });
+  } else {
+    // Fallback: save to localStorage directly and dispatch event
+    try {
+      const cart = JSON.parse(localStorage.getItem("threadco_cart")) || [];
+      const existing = cart.find((i) => i.productId === Number(product.id));
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: Number(product.id),
+          size: null,
+          color: null,
+          quantity: 1,
+        });
+      }
+      localStorage.setItem("threadco_cart", JSON.stringify(cart));
+      window.dispatchEvent(new CustomEvent("cart:updated", { detail: cart }));
+    } catch (e) {
+      console.warn("Could not save to cart from stylist:", e);
+    }
+  }
+
+  // Visual button state feedback
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.classList.add("is-added");
+  button.textContent = "Added ✓";
+
+  setTimeout(() => {
+    button.disabled = false;
+    button.classList.remove("is-added");
+    button.textContent = originalText;
+  }, 1600);
 }
 
 
