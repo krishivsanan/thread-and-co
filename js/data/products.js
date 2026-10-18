@@ -22,7 +22,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 201,
     photoUrl:
-      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80",
+      "https://warriorworld.in/cdn/shop/files/4065_black_1f9f1a10-ccb7-4f02-95c1-9759455af409.jpg?v=1755497320",
     name: "Classic Crew Tee",
     brand: "Thread & Co.",
     category: "men",
@@ -79,7 +79,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 204,
     photoUrl:
-      "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=900&q=80",
+      "https://static.massimodutti.net/assets/public/c952/40ac/2b494bec8817/fb1b7f458d18/00502124400-o3/00502124400-o3.jpg?ts=1780660955046",
     name: "Relaxed Denim Jeans",
     brand: "Lowline",
     category: "men",
@@ -98,7 +98,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 205,
     photoUrl:
-      "https://images.unsplash.com/photo-1572290067581-51ce0fc67e2b?auto=format&fit=crop&w=900&q=80",
+      "https://tigc.in/cdn/shop/files/0925-jktpu-01-01.jpg?v=1787891164&width=360",
     name: "Technical Windbreaker",
     brand: "Fieldwork",
     category: "men",
@@ -117,7 +117,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 206,
     photoUrl:
-      "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?auto=format&fit=crop&w=900&q=80",
+      "https://m.media-amazon.com/images/I/71jTuEo-D9L._AC_UY1100_.jpg",
     name: "Merino Wool Crewneck Sweater",
     brand: "Thread & Co.",
     category: "men",
@@ -155,7 +155,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 208,
     photoUrl:
-      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=900&q=80",
+      "https://www.urbanofashion.com/cdn/shop/files/jeanlstowl-mblue-1_6cfcdfec-25fa-4d05-a833-cb48b3a387ce.jpg?v=1776428487",
     name: "Slim Chino Trouser",
     brand: "Lowline",
     category: "men",
@@ -252,7 +252,7 @@ const PRODUCTS_FALLBACK = [
   {
     id: 305,
     photoUrl:
-      "https://images.unsplash.com/photo-1747817230321-4ad317ac0809?auto=format&fit=crop&w=900&q=80",
+      "https://img.magnific.com/free-photo/fashion-portrait-young-elegant-woman_1328-2741.jpg?semt=ais_hybrid&w=740&q=80",
     name: "Tailored Blazer",
     brand: "Aster Studio",
     category: "women",

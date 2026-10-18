@@ -103,23 +103,10 @@ function renderNotFound() {
 function renderGallery() {
   const mainPhoto = product.photoUrl || `assets/images/products/${product.id}.jpg`;
 
-  const thumbs = [
-    { src: mainPhoto },
-    { src: `assets/images/products/${product.id}.jpg` },
-    { label: "Detail shot" },
-    { label: "Worn shot" },
-  ];
-
   document.getElementById("pd-gallery-main").innerHTML = `<img src="${mainPhoto}" alt="${product.name}" id="pd-main-img" />`;
 
-  document.getElementById("pd-gallery-thumbs").innerHTML = thumbs
-    .map((thumb, index) => {
-      const inner = thumb.label
-        ? `<div class="img-placeholder" style="--ph-color-a:${product.placeholder.a};--ph-color-b:${product.placeholder.b};">${thumb.label}</div>`
-        : `<img src="${thumb.src}" alt="${product.name}" />`;
-      return `<button class="pd-gallery__thumb ${index === 0 ? "is-active" : ""}" data-thumb-src="${thumb.src || ""}" aria-label="View photo ${index + 1}">${inner}</button>`;
-    })
-    .join("");
+  document.getElementById("pd-gallery-thumbs").innerHTML =
+    `<button class="pd-gallery__thumb is-active" data-thumb-src="${mainPhoto}" aria-label="View photo 1"><img src="${mainPhoto}" alt="${product.name}" /></button>`;
 }
 
 function renderInfo() {
