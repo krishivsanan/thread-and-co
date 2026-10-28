@@ -109,25 +109,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
 
-    const response =
-      await fetch(
-        `${API_BASE}/orders`,
-        {
-          method: "GET",
+    const token = localStorage.getItem("threadco_token");
+    const userEmail = currentUser?.email || "";
 
-          headers: {
-
-            ...(localStorage.getItem("threadco_token")
-              ? {
-                  Authorization:
-                    `Bearer ${localStorage.getItem("threadco_token")}`
-                  }
-              : {})
-
-          }
-
+    const response = await fetch(
+      `${API_BASE}/orders?email=${encodeURIComponent(userEmail)}`,
+      {
+        method: "GET",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(userEmail ? { "X-User-Email": userEmail } : {})
         }
-      );
+      }
+    );
 
 
     const result =
@@ -197,6 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+    return;
   }
 
 

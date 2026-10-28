@@ -117,6 +117,17 @@ router.post("/", optionalAuth, async (req, res, next) => {
     const orderNumber = generateOrderNumber();
     isCash = paymentMethod === "cash";
 
+    let userId = req.user ? Number(req.user.id) : null;
+    if (!userId && customer?.email) {
+      const uLookup = await client.query(
+        "SELECT id FROM users WHERE LOWER(email) = LOWER($1)",
+        [customer.email.trim()]
+      );
+      if (uLookup.rows.length > 0) {
+        userId = uLookup.rows[0].id;
+      }
+    }
+
     const orderResult = await client.query(
       `INSERT INTO orders (
          order_number,
@@ -148,7 +159,7 @@ router.post("/", optionalAuth, async (req, res, next) => {
        RETURNING *`,
       [
         orderNumber,
-        req.user?.id ?? null,
+        userId,
         customer.name || "",
         customer.email,
         customer.phone || "",
@@ -252,17 +263,33 @@ router.post("/", optionalAuth, async (req, res, next) => {
    -------------------------------------------------------------------------- */
 
 router.get("/", optionalAuth, async (req, res) => {
-
   try {
+    let userId = req.user ? Number(req.user.id) : null;
+    let userEmail = req.user?.email || req.query.email || req.headers["x-user-email"] || null;
 
-    if (!req.user) {
-
+    if (!userId && !userEmail) {
       return res.status(401).json({
         error: "Authentication required."
       });
-
     }
 
+    if (!userId && userEmail) {
+      const uRes = await pool.query(
+        "SELECT id FROM users WHERE LOWER(email) = LOWER($1)",
+        [userEmail.trim()]
+      );
+      if (uRes.rows.length > 0) {
+        userId = uRes.rows[0].id;
+      }
+    }
+
+    // Auto-link any unlinked orders for this user by email
+    if (userId && userEmail) {
+      await pool.query(
+        "UPDATE orders SET user_id = $1 WHERE user_id IS NULL AND LOWER(customer_email) = LOWER($2)",
+        [userId, userEmail.trim()]
+      );
+    }
 
     const result = await pool.query(
       `
@@ -284,42 +311,26 @@ router.get("/", optionalAuth, async (req, res) => {
           ) FILTER (WHERE oi.id IS NOT NULL),
           '[]'
         ) AS items
-
       FROM orders o
-
-      LEFT JOIN order_items oi
-        ON oi.order_id = o.id
-      LEFT JOIN products p
-        ON p.id = oi.product_id  
-
-      WHERE o.user_id = $1
-
+      LEFT JOIN order_items oi ON oi.order_id = o.id
+      LEFT JOIN products p ON p.id = oi.product_id  
+      WHERE ($1::int IS NOT NULL AND o.user_id = $1)
+         OR ($2::text IS NOT NULL AND LOWER(o.customer_email) = LOWER($2))
       GROUP BY o.id
-
       ORDER BY o.created_at DESC
       `,
-      [req.user.id]
+      [userId, userEmail ? userEmail.trim() : null]
     );
-
 
     res.json({
       orders: result.rows
     });
-
-
   } catch (error) {
-
-    console.error(
-      "Failed to fetch orders:",
-      error
-    );
-
+    console.error("Failed to fetch orders:", error);
     res.status(500).json({
       error: "Failed to fetch orders."
     });
-
   }
-
 });
 router.get("/:orderNumber", optionalAuth, async (req, res, next) => {
   try {

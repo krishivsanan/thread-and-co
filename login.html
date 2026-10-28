@@ -222,7 +222,7 @@
 
         <div class="account-card__header">
 
-          <p class="account-card__eyebrow">
+          <p class="account-card__eyebrow" id="form-eyebrow">
             WELCOME BACK
           </p>
 
@@ -435,6 +435,101 @@
 
         </form>
 
+
+        
+        <!-- ================= FORGOT PASSWORD FORM ================= -->
+
+        <form
+          id="forgot-form"
+          class="account-form"
+          hidden
+        >
+
+          <div class="account-field">
+
+            <label for="forgot-email">
+              Email address
+            </label>
+
+            <input
+              type="email"
+              id="forgot-email"
+              placeholder="you@example.com"
+              required
+            >
+
+          </div>
+
+
+          <div class="account-field">
+
+            <label for="forgot-new-password">
+              New Password
+            </label>
+
+            <div class="password-input">
+
+              <input
+                type="password"
+                id="forgot-new-password"
+                placeholder="At least 6 characters"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-target="forgot-new-password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="account-field">
+
+            <label for="forgot-confirm-password">
+              Confirm New Password
+            </label>
+
+            <div class="password-input">
+
+              <input
+                type="password"
+                id="forgot-confirm-password"
+                placeholder="Re-enter your new password"
+                minlength="6"
+                required
+              >
+
+              <button
+                type="button"
+                class="toggle-password"
+                data-target="forgot-confirm-password"
+                aria-label="Show password"
+              >
+                Show
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="btn btn--primary account-submit"
+            id="forgot-submit-btn"
+          >
+            Reset Password
+          </button>
+
+        </form>
 
         <!-- SWITCH -->
 

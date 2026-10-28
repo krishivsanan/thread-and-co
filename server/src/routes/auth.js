@@ -97,6 +97,44 @@ router.post("/login", authLimiter, async (req, res, next) => {
 });
 
 /**
+ * POST /api/auth/reset-password
+ * body: { email, newPassword }
+ */
+router.post("/reset-password", authLimiter, async (req, res, next) => {
+  try {
+    const { email, newPassword } = req.body || {};
+
+    if (!email || typeof email !== "string" || !EMAIL_RE.test(email)) {
+      return res.status(400).json({ error: "A valid email is required." });
+    }
+
+    if (!newPassword || typeof newPassword !== "string" || newPassword.length < 6) {
+      return res.status(400).json({ error: "Password must be at least 6 characters." });
+    }
+
+    const userRes = await pool.query(
+      "SELECT id, name, email FROM users WHERE LOWER(email) = LOWER($1)",
+      [email.trim()]
+    );
+
+    if (userRes.rows.length === 0) {
+      return res.status(404).json({ error: "No account found with this email address." });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    await pool.query(
+      "UPDATE users SET password_hash = $1, updated_at = now() WHERE id = $2",
+      [passwordHash, userRes.rows[0].id]
+    );
+
+    res.json({ message: "Password reset successfully! Please sign in with your new password." });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * GET /api/auth/me
  * header: Authorization: Bearer <token>
  * Lets the frontend check "am I still logged in?" on page load without
